@@ -1,6 +1,8 @@
 import {
   REGISTER_SUCCESS,
   REGISTER_ERROR,
+  REGISTER_EMPLOYEE_ERROR,
+  REGISTER_EMPLOYEE_SUCCESS,
   LOGIN_ERROR,
   LOGIN_SUCCESS,
   FORGOT_ERROR,
@@ -13,17 +15,20 @@ import {
   CSRF_ERROR,
   CSRF_SUCCESS,
   LOGOUT_SUCCESS,
-  LOGOUT_ERROR
+  LOGOUT_ERROR,
+  LISTS_OF_USERS_SUCCESS,
+  LISTS_OF_USERS_ERROR
 } from "../actions/authActions";
 
 const initialState = {
   user: null,
+  usersLists: null,
   successMessage: null,
   error: null,
   csrfToken: null,
   loggedin: false,
   loading: false,
-  id: null,
+  userRole: null,
 
 };
 
@@ -64,6 +69,24 @@ const authReducer = (state = initialState, action) => {
         error: action.payload,
         loading: false
       };
+    case REGISTER_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.user,
+        userRole: 'admin',
+        successMessage: action.payload,
+        error: null,
+        loading: false,
+      }
+    case REGISTER_EMPLOYEE_ERROR:
+      return {
+        ...state,
+        user: action.payload.user,
+        userRole: 'admin',
+        successMessage: null,
+        error: action.payload,
+        loading: false
+      }
     case LOGIN_LOADING:
       return {
         ...state,
@@ -127,20 +150,34 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload.user,
-        id: action.payload.id,
         loading: false
       };
     case PROFILE_ERROR:
       return {
         ...state,
         user: null,
-        id: null,
         loading: false
       };
+    case LISTS_OF_USERS_SUCCESS:
+      return {
+        ...state,
+        usersLists: action.payload.users,
+        successMessage: action.payload.success,
+        error: null
+
+      }
+    case LISTS_OF_USERS_ERROR:
+      return {
+        ...state,
+        usersLists: [],
+        error: action.payload
+      }
     case LOGOUT_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload.message
+        user: null,
+        successMessage: action.payload.message,
+        error: null
       };
     case LOGOUT_ERROR:
       return {

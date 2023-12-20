@@ -42,10 +42,9 @@ import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 // ** Actions
 import { login } from "../../../redux/actions/authActions";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getCsrf, profile } from "../../../redux/actions/authActions";
+import { getCsrf } from "../../../redux/actions/authActions";
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({

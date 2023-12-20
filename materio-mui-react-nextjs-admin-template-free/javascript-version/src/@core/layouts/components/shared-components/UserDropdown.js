@@ -22,7 +22,9 @@ import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-
+import { logout, getCsrf } from 'src/redux/actions/authActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
   width: 8,
@@ -33,18 +35,24 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 }))
 
 const UserDropdown = () => {
+  const csrfToken = useSelector((state) => state.auth)
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
 
   // ** Hooks
   const router = useRouter()
+  const dispacth = useDispatch()
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
   }
+  useEffect(() => {
+    dispacth(getCsrf())
+  }, [dispacth])
 
   const handleDropdownClose = url => {
     if (url) {
+      dispacth(logout(csrfToken))
       router.push(url)
     }
     setAnchorEl(null)

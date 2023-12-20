@@ -20,7 +20,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-
+import Swal from 'sweetalert2'
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -30,6 +30,10 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 import { registerEmployee, getCsrf } from 'src/redux/actions/authActions'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { validateForm } from 'src/@core/utils/validation'
+import Loader from 'src/@core/utils/loader'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
@@ -37,7 +41,8 @@ const CustomInput = forwardRef((props, ref) => {
 
 const FormLayoutsSeparator = () => {
   // ** States
-  const csrfToken = useSelector((state) => state.auth.csrfToken)
+  const { csrfToken, error, loading, successMessage } = useSelector((state) => state.auth)
+  console.log(successMessage)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [values, setValues] = useState({
@@ -69,9 +74,32 @@ const FormLayoutsSeparator = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerEmployee(formValues,csrfToken,isLoggedIn))
-  };
+    const errors = validateForm(formValues);
+    if (Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((errorMessage) => {
+        toast.error(errorMessage);
+      });
+      return;
+    }
+    try {
+      dispatch(registerEmployee(formValues, csrfToken, isLoggedIn))
+    } catch (error) {
+      toast.error('An error occurred during form submission.');
+    }
 
+  };
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error)
+    }
+    if (successMessage?.message && !loading) {
+      Swal.fire({
+        icon: "success",
+        title: "User Register Successfully",
+        text: successMessage.message,
+      });
+    }
+  }, [error, successMessage]);
 
   // Handle Password
   const handlePasswordChange = prop => event => {
@@ -106,9 +134,12 @@ const FormLayoutsSeparator = () => {
 
   return (
     <Card>
-      <CardHeader title='Multi Column with Form Separator' titleTypographyProps={{ variant: 'h6' }} />
+      <ToastContainer />
+      <CardHeader title='User Registration Form' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
+
       <form onSubmit={handleSubmit}>
+        {loading ? <Loader /> : null}
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>

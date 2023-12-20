@@ -10,6 +10,7 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import { Account } from 'mdi-material-ui'
+import { AccountMultiple } from 'mdi-material-ui'
 
 
 
@@ -71,27 +72,35 @@ const navigation = (userRole) => {
       path: '/form-layouts'
     }
   ];
+  if (userRole === 'admin') {
+    commonLinks.unshift(
+      {
+        title: 'Admin Dashboard',
+        icon: HomeOutline,
+        path: '/admin-dashboard'
+      },
+      {
+        sectionTitle: 'User Interface'
+      },
+      {
+        title: 'User Registration',
+        icon: Account,
+        path: '/user-registraion'
+      },
+      {
+        title: 'User Lists',
+        icon: AccountMultiple,
+        path: '/lists-of-users'
+      }
+
+    );
+  }
   if (userRole === 'employee') {
     commonLinks.unshift({
       title: 'Dashboard',
       icon: HomeOutline,
       path: '/'
     });
-  }
-  // If the user is an admin, add admin-specific links
-  if (userRole === 'admin') {
-    commonLinks.unshift({
-      title: 'Admin Dashboard',
-      icon: HomeOutline,
-      path: '/admin-dashboard'
-    },
-      {
-        title: 'User Registration',
-        icon: Account,
-        path: '/user-registraion'
-      }
-
-    );
   }
 
   return commonLinks;

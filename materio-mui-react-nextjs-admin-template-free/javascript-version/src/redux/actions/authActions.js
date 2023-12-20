@@ -18,7 +18,9 @@ export const CSRF_SUCCESS = "CSRF_SUCCESS";
 export const LOGOUT_ERROR = "LOGOUT_ERROR";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const REGISTER_EMPLOYEE_SUCCESS = "REGISTER_EMPLOYEE_SUCCESS";
-export const REGISTER_EMPLOYEE_ERROR = "REGISTER_EMPLOYEE_ERROR"
+export const REGISTER_EMPLOYEE_ERROR = "REGISTER_EMPLOYEE_ERROR";
+export const LISTS_OF_USERS_ERROR = "LISTS_OF_USERS_ERROR";
+export const LISTS_OF_USERS_SUCCESS = "LISTS_OF_USERS_SUCCESS"
 
 
 
@@ -59,7 +61,6 @@ export const register = (userData, csrfToken) => async (dispatch) => {
   }
 };
 export const registerEmployee = (formValues, csrfToken, isLoggedIn) => async (dispatch) => {
-  console.log(formValues)
   dispatch({ type: LOGIN_LOADING });
   try {
     // Include the CSRF token in the request headers for POST requests
@@ -76,7 +77,6 @@ export const registerEmployee = (formValues, csrfToken, isLoggedIn) => async (di
         headers
       }
     );
-    console.log(registrationResponse)
     if (registrationResponse.data) {
       dispatch({ type: REGISTER_EMPLOYEE_SUCCESS, payload: registrationResponse.data });
     } else {
@@ -169,12 +169,13 @@ export const logout = (csrfToken) => async (dispatch) => {
     };
 
     const logouResponse = await axios.get(
-      `${backendServerURL}/user/logout`,
+      `${backendServerURL}/api/v1/logout`,
       {
         withCredentials: true,
         headers
       }
     );
+    console.log(logouResponse.data)
     if (logouResponse.data) {
       localStorage.removeItem("isLoggedIn");
       dispatch({ type: LOGOUT_SUCCESS, payload: logouResponse?.data });
@@ -304,4 +305,39 @@ export const profile = (csrfToken, isLoggedIn) => async (dispatch) => {
     }
   }
 };
+
+export const allUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING });
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const listOfUsersResponse = await axios.get(
+      `${backendServerURL}/api/v1/all-users`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (listOfUsersResponse.data) {
+      dispatch({ type: LISTS_OF_USERS_SUCCESS, payload: listOfUsersResponse.data });
+    } else {
+      dispatch({
+        type: LISTS_OF_USERS_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  }
+  catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: LISTS_OF_USERS_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: LISTS_OF_USERS_ERROR,
+        payload: "An error occurred while displaying the user",
+      });
+    }
+  }
+}
 

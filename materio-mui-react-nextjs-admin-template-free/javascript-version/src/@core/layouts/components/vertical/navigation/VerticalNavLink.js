@@ -56,7 +56,6 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
   const router = useRouter()
   const IconTag = item.icon
   const { user, csrfToken } = useSelector((state) => state.auth)
-  console.log(user?.role)
 
   const isNavLinkActive = () => {
     if (router.pathname === item.path || handleURLQueries(router, item.path)) {

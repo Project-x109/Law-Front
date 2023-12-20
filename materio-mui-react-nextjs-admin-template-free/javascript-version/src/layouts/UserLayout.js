@@ -24,7 +24,7 @@ import { debounce } from 'lodash';
 
 const UserLayout = ({ children }) => {
   // ** Hooks
-  const { user, csrfToken } = useSelector((state) => state.auth)
+  const { user, csrfToken, userRole } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const { settings, saveSettings } = useSettings()
@@ -38,14 +38,14 @@ const UserLayout = ({ children }) => {
    *  ! Do not change this value unless you know what you are doing. It can break the template.
    */
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
-    useEffect(() => {
-      dispatch(getCsrf())
-    }, [dispatch]);
-    useEffect(() => {
-      if (csrfToken && isLoggedIn) {
-        dispatch(profile(csrfToken, isLoggedIn));
-      }
-    }, [dispatch, csrfToken, isLoggedIn]);
+  useEffect(() => {
+    dispatch(getCsrf())
+  }, [dispatch]);
+  useEffect(() => {
+    if (csrfToken && isLoggedIn) {
+      dispatch(profile(csrfToken, isLoggedIn));
+    }
+  }, [dispatch, csrfToken, isLoggedIn]);
 
 
 
@@ -68,7 +68,7 @@ const UserLayout = ({ children }) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems(user?.role)} // Navigation Items
+      verticalNavItems={VerticalNavItems(user ? user?.role : userRole)} // Navigation Items
       afterVerticalNavMenuContent={UpgradeToProImg}
       verticalAppBarContent={(
         props // AppBar Content
