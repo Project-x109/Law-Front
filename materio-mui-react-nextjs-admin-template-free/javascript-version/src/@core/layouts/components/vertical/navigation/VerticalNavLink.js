@@ -68,7 +68,7 @@ const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }) => {
     if (path === undefined) {
       switch (role) {
         case 'employee':
-          return '/';
+          return '/user-dashboard';
         case 'admin':
           return '/admin-dashboard';
         default:

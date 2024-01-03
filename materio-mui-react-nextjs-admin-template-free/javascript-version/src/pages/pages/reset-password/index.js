@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -37,7 +37,13 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-
+import { ResetPasswordAction, getCsrf } from 'src/redux/actions/authActions'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from 'src/@core/utils/loader'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -58,15 +64,32 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const RegisterPage = () => {
+const ResetPasswordPage = () => {
   // ** States
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    showPassword: false,
+    confirmPassword: '',
+    showConfirmPassword: false,
+    resetToken: ''
   })
 
   // ** Hook
   const theme = useTheme()
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
+  const mainValues = { password: values.password, confirmPassword: values.confirmPassword, token: values.resetToken }
+  useEffect(() => {
+    // Access the token from the query parameters
+    const { token } = router.query;
+    if (token) {
+      setValues({ ...values, resetToken: token });
+    }
+  }, [router.query]);
+  useEffect(() => {
+    dispatch(getCsrf())
+  }, [dispatch, getCsrf()])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -75,13 +98,53 @@ const RegisterPage = () => {
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }
+  const handleClickConfirmPassword = () => {
+    setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
+  }
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+  const handleMouseDownConfirmePassword = event => {
+    event.preventDefault()
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!values.password) {
+      toast.error("Password is Required");
+      return;
+    }
+    if (values.password.length < 8) {
+      toast.warning("Password should be Eight digits or above");
+      return;
+    }
+    if (values.confirmPassword !== values.password) {
+      toast.error("Confirm password and Password should match");
+      return;
+    }
+
+    try {
+      dispatch(ResetPasswordAction(mainValues, csrfToken))
+    } catch (error) {
+      toast.error('An error occurred during form submission.');
+    }
+  }
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error)
+    }
+    if (successMessage?.success && !loading) {
+      Swal.fire({
+        icon: "success",
+        title: "Token Sent Successfully",
+        text: successMessage.success,
+      });
+    }
+  }, [error, successMessage]);
 
   return (
     <Box className='content-center'>
+      <ToastContainer />
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -163,10 +226,9 @@ const RegisterPage = () => {
             </Typography>
             <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
-            <FormControl fullWidth>
+          <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+            {loading ? <Loader /> : null}
+            <FormControl fullWidth sx={{ marginBottom: 4 }}>
               <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
@@ -188,6 +250,28 @@ const RegisterPage = () => {
                 }
               />
             </FormControl>
+            <FormControl fullWidth>
+              <InputLabel htmlFor='auth-register-password'>Confirm Password</InputLabel>
+              <OutlinedInput
+                label='Confirm Password'
+                value={values.confirmPassword}
+                id='auth-register-password'
+                onChange={handleChange('confirmPassword')}
+                type={values.showConfirmPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickConfirmPassword}
+                      onMouseDown={handleMouseDownConfirmePassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showConfirmPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <FormControlLabel
               control={<Checkbox />}
               label={
@@ -200,7 +284,7 @@ const RegisterPage = () => {
               }
             />
             <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-              Sign up
+              Submit
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
@@ -244,6 +328,6 @@ const RegisterPage = () => {
     </Box>
   )
 }
-RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+ResetPasswordPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default RegisterPage
+export default ResetPasswordPage

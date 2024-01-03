@@ -41,18 +41,17 @@ const UserDropdown = () => {
 
   // ** Hooks
   const router = useRouter()
-  const dispacth = useDispatch()
+  const dispach = useDispatch()
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
   }
   useEffect(() => {
-    dispacth(getCsrf())
-  }, [dispacth])
-
+    dispach(getCsrf())
+  }, [dispach])
   const handleDropdownClose = url => {
     if (url) {
-      dispacth(logout(csrfToken))
+      dispach(logout(csrfToken))
       router.push(url)
     }
     setAnchorEl(null)
@@ -152,7 +151,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/')}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

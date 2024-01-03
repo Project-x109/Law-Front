@@ -26,51 +26,14 @@ const navigation = (userRole) => {
       sectionTitle: 'Pages'
     },
     {
-      title: 'Login',
-      icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
-    },
-    {
-      title: 'Register',
-      icon: AccountPlusOutline,
-      path: '/pages/register',
-      openInNewTab: true
-    },
-    {
-      title: 'Error',
-      icon: AlertCircleOutline,
-      path: '/pages/error',
-      openInNewTab: true
-    },
-    {
       sectionTitle: 'User Interface'
     },
     {
-      title: 'Typography',
-      icon: FormatLetterCase,
-      path: '/typography'
+      title: 'Add New Issue',
+      icon: AccountCogOutline,
+      path: '/add-new-issue'
     },
-    {
-      title: 'Icons',
-      path: '/icons',
-      icon: GoogleCirclesExtended
-    },
-    {
-      title: 'Cards',
-      icon: CreditCardOutline,
-      path: '/cards'
-    },
-    {
-      title: 'Tables',
-      icon: Table,
-      path: '/tables'
-    },
-    {
-      icon: CubeOutline,
-      title: 'Form Layouts',
-      path: '/form-layouts'
-    }
+
   ];
   if (userRole === 'admin') {
     commonLinks.unshift(
@@ -79,6 +42,7 @@ const navigation = (userRole) => {
         icon: HomeOutline,
         path: '/admin-dashboard'
       },
+
       {
         sectionTitle: 'User Interface'
       },
@@ -99,7 +63,7 @@ const navigation = (userRole) => {
     commonLinks.unshift({
       title: 'Dashboard',
       icon: HomeOutline,
-      path: '/'
+      path: '/user-dashboard'
     });
   }
 

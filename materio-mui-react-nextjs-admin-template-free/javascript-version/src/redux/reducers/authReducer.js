@@ -18,7 +18,7 @@ import {
   LOGOUT_ERROR,
   LISTS_OF_USERS_SUCCESS,
   LISTS_OF_USERS_ERROR
-} from "../actions/authActions";
+} from "../constants/authconstant";
 
 const initialState = {
   user: null,

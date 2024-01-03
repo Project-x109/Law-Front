@@ -2,25 +2,11 @@ import axios from "axios";
 
 const backendServerURL = "http://localhost:4000";
 
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
-export const REGISTER_ERROR = "REGISTER_ERROR";
-export const LOGIN_ERROR = "LOGIN_ERROR";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const FORGOT_SUCCESS = "FORGOT_SUCCESS";
-export const FORGOT_ERROR = "FORGOT_ERROR";
-export const RESET_SUCCESS = "RESET_SUCCESS";
-export const RESET_ERROR = "RESET_ERROR";
-export const LOGIN_LOADING = "LOGIN_LOADING";
-export const PROFILE_ERROR = "PROFILE_ERROR";
-export const PROFILE_SUCCESS = "PROFILE_SUCCESS";
-export const CSRF_ERROR = "CSRF_ERROR";
-export const CSRF_SUCCESS = "CSRF_SUCCESS";
-export const LOGOUT_ERROR = "LOGOUT_ERROR";
-export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-export const REGISTER_EMPLOYEE_SUCCESS = "REGISTER_EMPLOYEE_SUCCESS";
-export const REGISTER_EMPLOYEE_ERROR = "REGISTER_EMPLOYEE_ERROR";
-export const LISTS_OF_USERS_ERROR = "LISTS_OF_USERS_ERROR";
-export const LISTS_OF_USERS_SUCCESS = "LISTS_OF_USERS_SUCCESS"
+import {
+  REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,
+  LOGIN_LOADING, PROFILE_ERROR, PROFILE_SUCCESS, CSRF_ERROR, CSRF_SUCCESS, LOGOUT_ERROR, LOGOUT_SUCCESS, REGISTER_EMPLOYEE_SUCCESS,
+  REGISTER_EMPLOYEE_ERROR, LISTS_OF_USERS_ERROR, LISTS_OF_USERS_SUCCESS
+} from "../constants/authconstant";
 
 
 
@@ -198,6 +184,7 @@ export const logout = (csrfToken) => async (dispatch) => {
 }
 
 export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch) => {
+  console.log(forgetpasswordData)
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
@@ -205,13 +192,14 @@ export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch
     };
 
     const forgetpasswordResponse = await axios.post(
-      `${backendServerURL}/user/resetpassword`,
+      `${backendServerURL}/api/v1/resetpassword`,
       forgetpasswordData,
       {
         withCredentials: true,
         headers
       }
     );
+    console.log(forgetpasswordResponse.data)
     if (forgetpasswordResponse.data) {
       dispatch({ type: FORGOT_SUCCESS, payload: forgetpasswordResponse.data });
     } else {
@@ -233,7 +221,7 @@ export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch
   }
 
 };
-export const ResetPasswordAction = (ResetpasswordData, csrfToken, token) => async (dispatch) => {
+export const ResetPasswordAction = (ResetpasswordData, csrfToken) => async (dispatch) => {
 
   try {
     dispatch({ type: LOGIN_LOADING });
@@ -242,13 +230,14 @@ export const ResetPasswordAction = (ResetpasswordData, csrfToken, token) => asyn
     };
 
     const resetpasswordResponse = await axios.put(
-      `${backendServerURL}/user/resetpassword/${token}`,
+      `${backendServerURL}/api/v1/resetpassword/${ResetpasswordData.token}`,
       ResetpasswordData,
       {
         withCredentials: true,
         headers
       }
     );
+    console.log(resetpasswordResponse.data)
     if (resetpasswordResponse.data) {
       dispatch({ type: RESET_SUCCESS, payload: resetpasswordResponse.data });
     } else {
@@ -305,7 +294,6 @@ export const profile = (csrfToken, isLoggedIn) => async (dispatch) => {
     }
   }
 };
-
 export const allUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
