@@ -69,8 +69,11 @@ const ForgetPasswordPage = () => {
   const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
 
   useEffect(() => {
-    dispatch(getCsrf())
+    if(error || successMessage){
+      dispatch(getCsrf())
+    }
   }, [dispatch, getCsrf()])
+
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })

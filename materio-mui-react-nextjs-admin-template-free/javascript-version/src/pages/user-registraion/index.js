@@ -40,7 +40,6 @@ const CustomInput = forwardRef((props, ref) => {
 const FormLayoutsSeparator = () => {
   // ** States
   const { csrfToken, error, loading, successMessage } = useSelector((state) => state.auth)
-  console.log(successMessage)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [values, setValues] = useState({
@@ -67,8 +66,10 @@ const FormLayoutsSeparator = () => {
     setFormValues({ ...formValues, dateOfBirth: date });
   };
   useEffect(() => {
-    dispatch(getCsrf())
-  }, [dispatch]);
+    if (error) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -96,6 +97,19 @@ const FormLayoutsSeparator = () => {
         title: "User Register Successfully",
         text: successMessage.message,
       });
+      setFormValues({
+        username: '',
+        password: '',
+        ConfirmPassword: '',
+        firstName: '',
+        lastName: '',
+        dateOfBirth: null,
+        phoneNo: '',
+      })
+      setValues({
+        password: '',
+        ConfirmPassword: ''
+      })
     }
   }, [error, successMessage]);
 

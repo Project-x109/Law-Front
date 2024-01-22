@@ -37,7 +37,6 @@ const UserLists = () => {
     { field: 'birthDate', headerName: 'Birth Date', flex: 1 },
     { field: 'phoneNumber', headerName: 'Phone Number', flex: 1 },
   ];
-  console.log(userLists)
 
   const data = {
     rows: userLists || [],

@@ -96,8 +96,10 @@ const LoginPage = () => {
   });
   const { username, password } = formData;
   useEffect(() => {
-    dispatch(getCsrf())
-  }, [dispatch, getCsrf()]);
+    if (error || successMessage) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()])
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

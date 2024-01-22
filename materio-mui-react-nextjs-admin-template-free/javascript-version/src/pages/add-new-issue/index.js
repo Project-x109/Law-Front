@@ -18,7 +18,6 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import Swal from 'sweetalert2'
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
-import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css'
 
 // ** Icons Imports
@@ -37,8 +36,8 @@ const CustomInput = forwardRef((props, ref) => {
 
 const FormLayoutsSeparator = () => {
   // ** States
-  const { csrfToken, error, loading, successMessage } = useSelector((state) => state.auth)
-  console.log(csrfToken);
+  const { csrfToken } = useSelector((state) => state.auth)
+  const { error, loading, successMessage } = useSelector((state) => state.issue)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
@@ -48,7 +47,8 @@ const FormLayoutsSeparator = () => {
     issueRaisedPlace: '',
     issueRaisingOffice: '',
     issueRaisingOfficer: '',
-    issueLevel:'',
+    issueLevel: '',
+    legalMotions: '',
     issueRequestDate: null,
     issueStartDate: null,
     issuedDate: null,
@@ -61,7 +61,6 @@ const FormLayoutsSeparator = () => {
   };
 
   const handleDateChange = (field) => (date) => {
-    console.log(date)
     setFormValues({ ...formValues, [field]: date });
   };
   const dateFields = [
@@ -100,8 +99,23 @@ const FormLayoutsSeparator = () => {
     if (successMessage?.message && !loading) {
       Swal.fire({
         icon: "success",
-        title: "User Register Successfully",
+        title: "Registerd Successfully",
         text: successMessage.message,
+      });
+      setFormValues({
+        issueType: '',
+        issueRegion: '',
+        requestingDepartment: '',
+        issueRaisedPlace: '',
+        issueRaisingOffice: '',
+        issueRaisingOfficer: '',
+        issueLevel: '',
+        legalMotions: '',
+        issueRequestDate: null,
+        issueStartDate: null,
+        issuedDate: null,
+        issueOpenDate: null,
+        issueDecisionDate: null
       });
     }
   }, [error, successMessage]);
@@ -113,6 +127,7 @@ const FormLayoutsSeparator = () => {
       <Divider sx={{ margin: 0 }} />
 
       <form onSubmit={handleSubmit}>
+        {loading ? <Loader /> : null}
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>
@@ -126,6 +141,7 @@ const FormLayoutsSeparator = () => {
                 <Select
                   label='issueType'
                   defaultValue=''
+                  value={formValues.issueType}
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
                   onChange={handleChange('issueType')}
@@ -142,6 +158,7 @@ const FormLayoutsSeparator = () => {
                 <Select
                   label='issueRegion'
                   defaultValue=''
+                  value={formValues.issueRegion}
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
                   onChange={handleChange('issueRegion')}
@@ -167,6 +184,7 @@ const FormLayoutsSeparator = () => {
                 <Select
                   label='requestingDepartment'
                   defaultValue=''
+                  value={formValues.requestingDepartment}
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
                   onChange={handleChange('requestingDepartment')}
@@ -197,6 +215,7 @@ const FormLayoutsSeparator = () => {
                 <Select
                   label='Issue Raising Office'
                   defaultValue=''
+                  value={formValues.issueRaisingOffice}
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
                   onChange={handleChange('issueRaisingOffice')}
@@ -212,6 +231,7 @@ const FormLayoutsSeparator = () => {
                 <InputLabel id='form-layouts-separator-select-label'>Issue Level</InputLabel>
                 <Select
                   label='Issue Level'
+                  value={formValues.issueLevel}
                   defaultValue=''
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
@@ -233,6 +253,7 @@ const FormLayoutsSeparator = () => {
                 <Select
                   label='Motions'
                   defaultValue=''
+                  value={formValues.legalMotions}
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
                   onChange={handleChange('legalMotions')}

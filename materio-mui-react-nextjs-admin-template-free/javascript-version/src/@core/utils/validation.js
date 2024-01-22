@@ -31,7 +31,6 @@ export const validateForm = (values) => {
   }
   return errors;
 };
-
 export const validateFormIssus = (values) => {
   const errors = {};
 
@@ -58,6 +57,9 @@ export const validateFormIssus = (values) => {
   }
   if (!values.issueLevel) {
     errors.issueLevel = 'Issue Level is required.';
+  }
+  if (!values.legalMotions) {
+    errors.legalMotions = "Please Insert the Legal Motion."
   }
 
   if (!values.issueRaisingOfficer) {

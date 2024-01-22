@@ -161,7 +161,6 @@ export const logout = (csrfToken) => async (dispatch) => {
         headers
       }
     );
-    console.log(logouResponse.data)
     if (logouResponse.data) {
       localStorage.removeItem("isLoggedIn");
       dispatch({ type: LOGOUT_SUCCESS, payload: logouResponse?.data });
@@ -184,7 +183,6 @@ export const logout = (csrfToken) => async (dispatch) => {
 }
 
 export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch) => {
-  console.log(forgetpasswordData)
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
@@ -199,7 +197,6 @@ export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch
         headers
       }
     );
-    console.log(forgetpasswordResponse.data)
     if (forgetpasswordResponse.data) {
       dispatch({ type: FORGOT_SUCCESS, payload: forgetpasswordResponse.data });
     } else {
@@ -237,7 +234,6 @@ export const ResetPasswordAction = (ResetpasswordData, csrfToken) => async (disp
         headers
       }
     );
-    console.log(resetpasswordResponse.data)
     if (resetpasswordResponse.data) {
       dispatch({ type: RESET_SUCCESS, payload: resetpasswordResponse.data });
     } else {
