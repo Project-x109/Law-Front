@@ -88,8 +88,11 @@ const FormLayoutsSeparator = () => {
 
   };
   useEffect(() => {
-    if (error) {
-      toast.error(error?.error)
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
     }
     if (successMessage?.message && !loading) {
       Swal.fire({
@@ -112,7 +115,7 @@ const FormLayoutsSeparator = () => {
       })
     }
   }, [error, successMessage]);
-
+  console.log(error)
   // Handle Password
   const handlePasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })

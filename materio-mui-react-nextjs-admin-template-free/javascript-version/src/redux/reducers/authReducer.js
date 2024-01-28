@@ -17,7 +17,11 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
   LISTS_OF_USERS_SUCCESS,
-  LISTS_OF_USERS_ERROR
+  LISTS_OF_USERS_ERROR,
+  CHANGE_OLD_PSSSWORD_ERROR,
+  CHANGE_OLD_PSSSWORD_SUCCESS,
+  CLEAR_SUCCESS_MESSAGE
+
 } from "../constants/authconstant";
 
 const initialState = {
@@ -184,6 +188,26 @@ const authReducer = (state = initialState, action) => {
         ...state,
         successMessage: null,
         error: action.payload
+      }
+    case CHANGE_OLD_PSSSWORD_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        error: null,
+        loading: false
+      }
+    case CHANGE_OLD_PSSSWORD_ERROR:
+      return {
+        ...state,
+        loading: false,
+        successMessage: null,
+        error: action.payload
+      }
+    case CLEAR_SUCCESS_MESSAGE:
+      return {
+        ...state,
+        successMessage: null,
+        error: null
       }
     default:
       return state;

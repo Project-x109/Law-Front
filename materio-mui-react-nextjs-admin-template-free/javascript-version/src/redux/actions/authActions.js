@@ -5,7 +5,8 @@ const backendServerURL = "http://localhost:4000";
 import {
   REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,
   LOGIN_LOADING, PROFILE_ERROR, PROFILE_SUCCESS, CSRF_ERROR, CSRF_SUCCESS, LOGOUT_ERROR, LOGOUT_SUCCESS, REGISTER_EMPLOYEE_SUCCESS,
-  REGISTER_EMPLOYEE_ERROR, LISTS_OF_USERS_ERROR, LISTS_OF_USERS_SUCCESS
+  REGISTER_EMPLOYEE_ERROR, LISTS_OF_USERS_ERROR, LISTS_OF_USERS_SUCCESS, CHANGE_OLD_PSSSWORD_ERROR, CHANGE_OLD_PSSSWORD_SUCCESS
+  , CLEAR_SUCCESS_MESSAGE
 } from "../constants/authconstant";
 
 
@@ -255,6 +256,43 @@ export const ResetPasswordAction = (ResetpasswordData, csrfToken) => async (disp
   }
 
 };
+
+export const changeOldPassword = (values, csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING });
+
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const changeOldPasswordResponse = await axios.put(
+      `${backendServerURL}/api/v1/changepassword`,
+      values,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (changeOldPasswordResponse.data) {
+      dispatch({ type: CHANGE_OLD_PSSSWORD_SUCCESS, payload: changeOldPasswordResponse.data });
+    } else {
+      dispatch({
+        type: CHANGE_OLD_PSSSWORD_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: CHANGE_OLD_PSSSWORD_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: CHANGE_OLD_PSSSWORD_ERROR,
+        payload: "An error occurred while Changing password",
+      });
+    }
+  }
+}
 export const profile = (csrfToken, isLoggedIn) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
@@ -325,3 +363,6 @@ export const allUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
   }
 }
 
+export const clearSuccessMessage = () => async (dispatch) => {
+  dispatch({ type: CLEAR_SUCCESS_MESSAGE, })
+};

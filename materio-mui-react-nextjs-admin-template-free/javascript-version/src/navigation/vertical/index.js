@@ -3,7 +3,8 @@ import HomeOutline from 'mdi-material-ui/HomeOutline'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import { Account } from 'mdi-material-ui'
 import { AccountMultiple } from 'mdi-material-ui'
-import {CheckboxMarkedCircleMinusOutline} from 'mdi-material-ui'
+import { CheckboxMarkedCircleMinusOutline } from 'mdi-material-ui'
+import { StarFourPointsCircleOutline } from 'mdi-material-ui'
 const navigation = (userRole) => {
 
   const commonLinks = [
@@ -13,7 +14,7 @@ const navigation = (userRole) => {
       path: '/account-settings'
     },
     {
-      sectionTitle: 'User Interface'
+      sectionTitle: 'Issue Related'
     },
     {
       title: 'Add New Issue',
@@ -24,6 +25,11 @@ const navigation = (userRole) => {
       title: 'Navigate Issues',
       icon: CheckboxMarkedCircleMinusOutline,
       path: '/navigate-issues'
+    },
+    {
+      title: 'Specific Issues',
+      icon: StarFourPointsCircleOutline,
+      path: '/navigate-specific-issues'
     }
 
   ];
@@ -60,10 +66,10 @@ const navigation = (userRole) => {
         sectionTitle: 'User Pages'
       },
       {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/user-dashboard'
-    });
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/user-dashboard'
+      });
   }
 
   return commonLinks;

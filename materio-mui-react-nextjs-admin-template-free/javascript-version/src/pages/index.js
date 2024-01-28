@@ -44,6 +44,9 @@ import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getCsrf, login } from "src/redux/actions/authActions";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -95,8 +98,10 @@ const LoginPage = () => {
   });
   const { username, password } = formData;
   useEffect(() => {
-    dispatch(getCsrf())
-  }, [dispatch, getCsrf()]);
+    if (error || successMessage) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()])
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -120,11 +125,7 @@ const LoginPage = () => {
       password,
     };
     if (!username || !password) {
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: "Please fill in both fields.",
-      });
+      toast.error("Please fill in both fields.")
       return;
     }
     try {
@@ -142,17 +143,17 @@ const LoginPage = () => {
     }
   }
   useEffect(() => {
-    if (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Login Error",
-        text: error.error || "An error occurred while logging in",
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
       });
     }
   }, [error]);
 
   return (
     <Box className='content-center'>
+      <ToastContainer />
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

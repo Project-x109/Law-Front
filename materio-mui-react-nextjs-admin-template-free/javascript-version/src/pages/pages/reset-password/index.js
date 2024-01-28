@@ -110,7 +110,7 @@ const ResetPasswordPage = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!values.password) {
+    if (!values.password || !values.confirmPassword) {
       toast.error("Password is Required");
       return;
     }
@@ -130,13 +130,16 @@ const ResetPasswordPage = () => {
     }
   }
   useEffect(() => {
-    if (error) {
-      toast.error(error?.error)
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
     }
     if (successMessage?.success && !loading) {
       Swal.fire({
         icon: "success",
-        title: "Token Sent Successfully",
+        title: "Password Changed Successfully",
         text: successMessage.success,
       });
     }

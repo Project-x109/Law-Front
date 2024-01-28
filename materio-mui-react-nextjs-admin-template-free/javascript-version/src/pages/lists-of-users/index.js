@@ -63,6 +63,15 @@ const UserLists = () => {
               components={{
                 Toolbar: GridToolbar
               }}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5, 10, 50, 100]}
+              checkboxSelection
               disableRowSelectionOnClick
             />
           </Card>

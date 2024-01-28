@@ -106,7 +106,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (successMessage) {
       if (user?.role === "employee") {
-        router.push("/");
+        router.push("/user-dashboard");
       }
       else {
         router.push("/admin-dashboard")
@@ -119,14 +119,14 @@ const LoginPage = () => {
       username,
       password,
     };
-    if (!username || !password) {
+/*     if (!username || !password) {
       Swal.fire({
         icon: "error",
         title: "Validation Error",
         text: "Please fill in both fields.",
       });
       return;
-    }
+    } */
     try {
 
       dispatch(login(loginData, csrfToken));

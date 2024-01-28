@@ -69,9 +69,7 @@ const ForgetPasswordPage = () => {
   const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
 
   useEffect(() => {
-    if(error || successMessage){
-      dispatch(getCsrf())
-    }
+    dispatch(getCsrf())
   }, [dispatch, getCsrf()])
 
 
@@ -91,8 +89,11 @@ const ForgetPasswordPage = () => {
     }
   }
   useEffect(() => {
-    if (error) {
-      toast.error(error?.error)
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
     }
     if (successMessage?.success && !loading) {
       Swal.fire({

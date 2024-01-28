@@ -7,40 +7,43 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { getCsrf } from 'src/redux/actions/authActions';
-import { getAllIssues } from 'src/redux/actions/issuections';
+import { getUserBasedIssues } from 'src/redux/actions/issuections';
 import { ToastContainer, toast } from 'react-toastify';
 import { Chip } from '@mui/material';
 import { getStatusColor, getLevelColor } from 'src/@core/utils/otherUtils';
 import { OpenInNew } from 'mdi-material-ui';
 const UserLists = () => {
-  const { error, issues } = useSelector((state) => state.issue)
+  const { error, userSpecificIssue } = useSelector((state) => state.issue)
   const { csrfToken } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCsrf())
-    dispatch(getAllIssues(csrfToken, isLoggedIn))
+    dispatch(getUserBasedIssues(csrfToken, isLoggedIn))
   }, [dispatch]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
   }, [error]);
-  const issue = issues?.reverse()?.map((item) => ({
-    id: item?._id,
-    requestingDepartment: item?.requestingDepartment?.toUpperCase(),
-    issuedDate: new Date(item?.issuedDate)?.toLocaleDateString(),
-    issueType: item?.issueType?.toUpperCase(),
-    issueStartDate: new Date(item?.issueStartDate)?.toLocaleDateString(),
-    issueRequestDate: new Date(item?.issueRequestDate)?.toLocaleDateString(),
-    issueRegion: item?.issueRegion?.toUpperCase(),
-    issueRaisedPlace: item?.issueRaisedPlace?.toUpperCase(),
-    issueOpenDate: new Date(item?.issueOpenDate)?.toLocaleDateString(),
-    issueLevel: item?.issueLevel?.toUpperCase(),
-    issueDecisionDate: new Date(item?.issueDecisionDate)?.toLocaleDateString(),
-    status: item?.status?.toUpperCase(),
-    createdBy: (item?.createdBy?.firstName)?.toUpperCase(),
-  }))
+  const issue = Array.isArray(userSpecificIssue)
+    ? userSpecificIssue.reverse().map((item) => ({
+      id: item?._id || null,
+      requestingDepartment: item?.requestingDepartment?.toUpperCase() || null,
+      issuedDate: new Date(item?.issuedDate)?.toLocaleDateString() || null,
+      issueType: item?.issueType?.toUpperCase() || null,
+      issueStartDate: new Date(item?.issueStartDate)?.toLocaleDateString() || null,
+      issueRequestDate: new Date(item?.issueRequestDate)?.toLocaleDateString() || null,
+      issueRegion: item?.issueRegion?.toUpperCase() || null,
+      issueRaisedPlace: item?.issueRaisedPlace?.toUpperCase() || null,
+      issueOpenDate: new Date(item?.issueOpenDate)?.toLocaleDateString() || null,
+      issueLevel: item?.issueLevel?.toUpperCase(),
+      issueDecisionDate: new Date(item?.issueDecisionDate)?.toLocaleDateString() || null,
+      status: item?.status?.toUpperCase() || null,
+      createdBy: (item?.createdBy?.firstName)?.toUpperCase() || null,
+    }))
+    : [];
+
   const columns = [
     { field: 'requestingDepartment', headerName: 'Department', flex: 100 },
     { field: 'issuedDate', headerName: 'Issued Date', flex: 100 },

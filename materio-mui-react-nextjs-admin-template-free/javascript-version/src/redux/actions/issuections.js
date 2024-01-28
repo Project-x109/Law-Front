@@ -9,7 +9,9 @@ import {
   FETCH_ALL_ISSUES_SUCCESS,
   FETCH_ALL_ISSUES_ERROR,
   UPDATE_ISSUE_ERROR,
-  UPDATE_ISSUE_SUCCESS
+  UPDATE_ISSUE_SUCCESS,
+  FETCH_SPECIFIC_ISSUES_ERROR,
+  FETCH_SPECIFIC_ISSUES_SUCCESS
 
 } from "../constants/issueConstant";
 
@@ -157,4 +159,39 @@ export const updateIssue = (csrfToken, isLoggedIn, issueId, formValues) => async
     }
   }
 
+}
+export const getUserBasedIssues = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    // Include the CSRF token in the request headers for POST requests
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const fetchUserBasedIssuesResponse = await axios.get(
+      `${backendServerURL}/getissuesbylogin`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (fetchUserBasedIssuesResponse.data) {
+      dispatch({ type: FETCH_SPECIFIC_ISSUES_SUCCESS, payload: fetchUserBasedIssuesResponse.data });
+    } else {
+      dispatch({
+        type: FETCH_SPECIFIC_ISSUES_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: FETCH_SPECIFIC_ISSUES_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: FETCH_SPECIFIC_ISSUES_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
 }

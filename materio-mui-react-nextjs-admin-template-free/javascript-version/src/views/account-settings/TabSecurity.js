@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -21,15 +21,25 @@ import KeyOutline from 'mdi-material-ui/KeyOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 
+import { changeOldPassword, getCsrf, clearSuccessMessage } from 'src/redux/actions/authActions'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from 'src/@core/utils/loader'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import Swal from 'sweetalert2'
+
 const TabSecurity = () => {
+  const dispatch = useDispatch()
+  const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
+  const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   // ** States
   const [values, setValues] = useState({
-    newPassword: '',
+    password: '',
     currentPassword: '',
-    showNewPassword: false,
-    confirmNewPassword: '',
+    showpassword: false,
+    confirmPassword: '',
     showCurrentPassword: false,
-    showConfirmNewPassword: false
+    showconfirmPassword: false
   })
 
   // Handle Current Password
@@ -46,33 +56,91 @@ const TabSecurity = () => {
   }
 
   // Handle New Password
-  const handleNewPasswordChange = prop => event => {
+  const handlepasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleClickShowNewPassword = () => {
-    setValues({ ...values, showNewPassword: !values.showNewPassword })
+  const handleClickShowpassword = () => {
+    setValues({ ...values, showpassword: !values.showpassword })
   }
 
-  const handleMouseDownNewPassword = event => {
+  const handleMouseDownpassword = event => {
     event.preventDefault()
   }
 
   // Handle Confirm New Password
-  const handleConfirmNewPasswordChange = prop => event => {
+  const handleconfirmPasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleClickShowConfirmNewPassword = () => {
-    setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
+  const handleClickShowconfirmPassword = () => {
+    setValues({ ...values, showconfirmPassword: !values.showconfirmPassword })
   }
 
-  const handleMouseDownConfirmNewPassword = event => {
+  const handleMouseDownconfirmPassword = event => {
     event.preventDefault()
   }
 
+  useEffect(() => {
+    if (error) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()])
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!values.password || !values.confirmPassword || !values.currentPassword) {
+      toast.error("All fields are Required");
+      return;
+    }
+    if (values.currentPassword === values.password) {
+      toast.error("Old Password and New Password Can not be the same");
+      return;
+    }
+    if (values.password.length < 8) {
+      toast.warning("Password should be Eight digits or above");
+      return;
+    }
+    if (values.confirmPassword !== values.password) {
+      toast.error("Confirm password and Password should match");
+      return;
+    }
+
+    try {
+      dispatch(changeOldPassword(values, csrfToken, isLoggedIn))
+      setValues({
+        password: '',
+        currentPassword: '',
+        showpassword: false,
+        confirmPassword: '',
+        showCurrentPassword: false,
+        showconfirmPassword: false
+      })
+
+    } catch (error) {
+      toast.error('An error occurred during form submission.');
+    }
+  }
+  useEffect(() => {
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
+    }
+    if (successMessage && !loading) {
+      Swal.fire({
+        icon: "success",
+        title: "Password Changed Successfully",
+        text: successMessage.message,
+      });
+      dispatch(clearSuccessMessage())
+    }
+  }, [error, successMessage, loading, dispatch]);
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
+      <ToastContainer />
+      {loading ? <Loader /> : null}
       <CardContent sx={{ paddingBottom: 0 }}>
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6}>
@@ -107,19 +175,19 @@ const TabSecurity = () => {
                   <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
                   <OutlinedInput
                     label='New Password'
-                    value={values.newPassword}
+                    value={values.password}
                     id='account-settings-new-password'
-                    onChange={handleNewPasswordChange('newPassword')}
-                    type={values.showNewPassword ? 'text' : 'password'}
+                    onChange={handlepasswordChange('password')}
+                    type={values.showpassword ? 'text' : 'password'}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
                           edge='end'
-                          onClick={handleClickShowNewPassword}
+                          onClick={handleClickShowpassword}
                           aria-label='toggle password visibility'
-                          onMouseDown={handleMouseDownNewPassword}
+                          onMouseDown={handleMouseDownpassword}
                         >
-                          {values.showNewPassword ? <EyeOutline /> : <EyeOffOutline />}
+                          {values.showpassword ? <EyeOutline /> : <EyeOffOutline />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -132,19 +200,19 @@ const TabSecurity = () => {
                   <InputLabel htmlFor='account-settings-confirm-new-password'>Confirm New Password</InputLabel>
                   <OutlinedInput
                     label='Confirm New Password'
-                    value={values.confirmNewPassword}
+                    value={values.confirmPassword}
                     id='account-settings-confirm-new-password'
-                    type={values.showConfirmNewPassword ? 'text' : 'password'}
-                    onChange={handleConfirmNewPasswordChange('confirmNewPassword')}
+                    type={values.showconfirmPassword ? 'text' : 'password'}
+                    onChange={handleconfirmPasswordChange('confirmPassword')}
                     endAdornment={
                       <InputAdornment position='end'>
                         <IconButton
                           edge='end'
                           aria-label='toggle password visibility'
-                          onClick={handleClickShowConfirmNewPassword}
-                          onMouseDown={handleMouseDownConfirmNewPassword}
+                          onClick={handleClickShowconfirmPassword}
+                          onMouseDown={handleMouseDownconfirmPassword}
                         >
-                          {values.showConfirmNewPassword ? <EyeOutline /> : <EyeOffOutline />}
+                          {values.showconfirmPassword ? <EyeOutline /> : <EyeOffOutline />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -200,14 +268,14 @@ const TabSecurity = () => {
         </Box>
 
         <Box sx={{ mt: 11 }}>
-          <Button variant='contained' sx={{ marginRight: 3.5 }}>
+          <Button variant='contained' type='submit' sx={{ marginRight: 3.5 }}>
             Save Changes
           </Button>
           <Button
             type='reset'
             variant='outlined'
             color='secondary'
-            onClick={() => setValues({ ...values, currentPassword: '', newPassword: '', confirmNewPassword: '' })}
+            onClick={() => setValues({ ...values, currentPassword: '', password: '', confirmPassword: '' })}
           >
             Reset
           </Button>

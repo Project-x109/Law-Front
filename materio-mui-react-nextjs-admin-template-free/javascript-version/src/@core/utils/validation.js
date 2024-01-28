@@ -2,8 +2,8 @@ export const validateForm = (values) => {
   const errors = {};
   if (!values.username) {
     errors.username = 'Username is required.';
-  } else if (!/^[a-zA-Z0-9_@.]{3,45}$/.test(values.username)) {
-    errors.username = 'Username must be 3-20 characters and can only contain letters, numbers, and underscores.';
+  } else if (!/^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\.,;:\s@"]+)*)|(".+"))@(([^<>()\[\]\.,;:\s@"]+\.)+[^<>()\[\]\.,;:\s@"]{2,})$/i.test(values.username)) {
+    errors.username = 'Invalid Email';
   }
   if (!values.password) {
     errors.password = 'Password is required.';
@@ -26,7 +26,7 @@ export const validateForm = (values) => {
   }
   if (!values.phoneNo) {
     errors.phoneNo = 'Phone Number is required.';
-  } else if (!/^\+?\d{1,15}$/.test(values.phoneNo)) {
+  } else if (!/(\+\s*2\s*5\s*1\s*9\s*(([0-9]\s*){8}\s*))|(\+\s*2\s*5\s*1\s*9\s*(([0-9]\s*){8}\s*))|(0\s*9\s*(([0-9]\s*){8}))|(0\s*7\s*(([0-9]\s*){8}))/.test(values.phoneNo)) {
     errors.phoneNo = 'Invalid phone number format.';
   }
   return errors;

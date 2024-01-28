@@ -74,7 +74,7 @@ const FormLayoutsSeparator = () => {
     if (error) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()]);
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -93,8 +93,11 @@ const FormLayoutsSeparator = () => {
 
   };
   useEffect(() => {
-    if (error) {
-      toast.error(error?.error)
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
     }
     if (successMessage?.message && !loading) {
       Swal.fire({

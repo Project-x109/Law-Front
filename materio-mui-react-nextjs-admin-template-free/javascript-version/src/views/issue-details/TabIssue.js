@@ -17,6 +17,7 @@ import { getIndividualIssue, updateIssue } from 'src/redux/actions/issuections'
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from 'src/@core/utils/loader'
 import Divider from '@mui/material/Divider'
+import { clearSuccessMessage } from 'src/redux/actions/authActions'
 
 // ** Icons Imports
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
@@ -128,8 +129,11 @@ const TabIssue = () => {
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error?.error)
+    if (error && error?.error && error?.error.length > 0) {
+      error?.error.map((singleError, index) => {
+        toast.error(singleError);
+        return null;
+      });
     }
     if (successMessage?.message && !loading) {
       Swal.fire({
@@ -137,6 +141,7 @@ const TabIssue = () => {
         title: "Updated Successfully",
         text: successMessage.message,
       });
+      dispatch(clearSuccessMessage())
     }
   }, [error, successMessage]);
 
