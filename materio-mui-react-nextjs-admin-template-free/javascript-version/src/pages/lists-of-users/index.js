@@ -8,18 +8,25 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { allUsers, getCsrf } from 'src/redux/actions/authActions';
 import { ToastContainer, toast } from 'react-toastify';
+import { clearSuccessMessage } from 'src/redux/actions/authActions';
+import Loader from 'src/@core/utils/loader';
+import { getUserStatusColor } from 'src/@core/utils/otherUtils';
+import { Chip } from '@mui/material';
 const UserLists = () => {
-  const { csrfToken, error, usersLists } = useSelector((state) => state.auth)
+  const { csrfToken, error, usersLists, loading } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCsrf())
+    if (!csrfToken) {
+      dispatch(getCsrf())
+    }
     dispatch(allUsers(csrfToken, isLoggedIn))
-  }, [dispatch]);
+  }, [dispatch, csrfToken, isLoggedIn]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
+    dispatch(clearSuccessMessage())
   }, [error]);
 
   const userLists = usersLists?.map((item) => ({
@@ -29,6 +36,7 @@ const UserLists = () => {
     lastName: item?.lastName,
     birthDate: new Date(item?.birthDate).toLocaleString(),
     phoneNumber: item?.phoneNumber,
+    status: item?.status
   }))
   const columns = [
     { field: 'username', headerName: 'Username', flex: 1 },
@@ -36,6 +44,21 @@ const UserLists = () => {
     { field: 'lastName', headerName: 'Last Name', flex: 1 },
     { field: 'birthDate', headerName: 'Birth Date', flex: 1 },
     { field: 'phoneNumber', headerName: 'Phone Number', flex: 1 },
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          style={{
+            backgroundColor: getUserStatusColor(params?.value),
+            color: 'white',
+          }}
+        />
+      )
+
+    },
   ];
 
   const data = {
@@ -45,6 +68,7 @@ const UserLists = () => {
   return (
     <>
       <ToastContainer />
+      {loading ? <Loader /> : null}
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Typography variant='h5'>

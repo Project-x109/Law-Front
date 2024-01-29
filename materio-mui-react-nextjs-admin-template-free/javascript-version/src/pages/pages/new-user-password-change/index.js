@@ -1,18 +1,16 @@
 // ** React Imports
-import React, { useState, useEffect } from "react";
+import { useState, Fragment, useEffect } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox'
-import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
+import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
@@ -38,16 +36,13 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-
-// ** Actions
-import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { getCsrf, login } from "src/redux/actions/authActions";
-import { ToastContainer, toast } from 'react-toastify';
+import { changeNewUserPassword, getCsrf } from 'src/redux/actions/authActions'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from 'src/@core/utils/loader'
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import { ToastContainer, toast } from 'react-toastify'
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -60,25 +55,43 @@ const LinkStyled = styled('a')(({ theme }) => ({
 }))
 
 const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+  marginTop: theme.spacing(1.5),
+  marginBottom: theme.spacing(4),
   '& .MuiFormControlLabel-label': {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary
   }
 }))
 
-const LoginPage = () => {
-  const { error, csrfToken, successMessage, user } = useSelector((state) => state.auth)
-  const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
-
-  // ** State
+const NewUserResetPasswordPage = () => {
+  // ** States
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    showPassword: false,
+    confirmPassword: '',
+    showConfirmPassword: false,
+    resetToken: ''
   })
 
   // ** Hook
   const theme = useTheme()
+  const dispatch = useDispatch()
   const router = useRouter()
+  const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
+  const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+  const mainValues = { password: values.password, confirmPassword: values.confirmPassword, token: values.resetToken }
+  useEffect(() => {
+    // Access the token from the query parameters
+    const { token } = router.query;
+    if (token) {
+      setValues({ ...values, resetToken: token });
+    }
+  }, [router.query]);
+  useEffect(() => {
+    if (!csrfToken) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -87,62 +100,35 @@ const LoginPage = () => {
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }
+  const handleClickConfirmPassword = () => {
+    setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
+  }
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-  const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-  const { username, password } = formData;
-  useEffect(() => {
-    if (!csrfToken) {
-      dispatch(getCsrf())
-    }
-  }, [dispatch, getCsrf()])
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  useEffect(() => {
-    if (successMessage) {
-      if (user?.role === "employee" && user?.status === "active") {
-        router.push("/user-dashboard");
-      }
-      else if (user?.role === "employee" && user?.status === "pending") {
-        router.push("/pages/new-user-password-change")
-      }
-      else if (user?.role === "admin") {
-        router.push("/admin-dashboard")
-      }
-      else {
-        router.push("/")
-      }
-    }
-  }, [successMessage, dispatch, isLoggedIn]);
-  const handleSubmit = async (e) => {
+  const handleMouseDownConfirmePassword = event => {
+    event.preventDefault()
+  }
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const loginData = {
-      username,
-      password,
-    };
-    if (!username || !password) {
-      toast.error("Please fill in both fields.")
+    if (!values.password || !values.confirmPassword) {
+      toast.error("Password is Required");
       return;
     }
+    if (values.password.length < 8) {
+      toast.warning("Password should be Eight digits or above");
+      return;
+    }
+    if (values.confirmPassword !== values.password) {
+      toast.error("Confirm password and Password should match");
+      return;
+    }
+
     try {
-
-      dispatch(login(loginData, csrfToken));
-
+      dispatch(changeNewUserPassword(mainValues, csrfToken, isLoggedIn))
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Login Error",
-        text: error.response?.data.error || "An error occurred while logging in"
-      }).then(() => {
-        router.push("/");
-      });
+      toast.error('An error occurred during form submission.');
     }
   }
   useEffect(() => {
@@ -152,7 +138,16 @@ const LoginPage = () => {
         return null;
       });
     }
-  }, [error]);
+    if (successMessage?.message && !loading) {
+      Swal.fire({
+        icon: "success",
+        title: "Password Changed Successfully",
+        text: successMessage.message,
+      }).then(() => {
+        router.push("/user-dashboard")
+      });
+    }
+  }, [error, successMessage]);
 
   return (
     <Box className='content-center'>
@@ -234,32 +229,19 @@ const LoginPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
+              Adventure starts here 🚀
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box>
-          <form autoComplete='off' onSubmit={handleSubmit}>
-            <TextField
-              value={username}
-              onChange={handleInputChange}
-              autoFocus
-              fullWidth
-              name="username"
-              id='email'
-              label='Email'
-              sx={{ marginBottom: 4 }}
-            />
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
+          <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+            {loading ? <Loader /> : null}
+            <FormControl fullWidth sx={{ marginBottom: 4 }}>
+              <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
-                name="password"
                 value={values.password}
-                id='auth-login-password'
-                onChange={(e) => {
-                  handleChange('password')(e);
-                  handleInputChange(e);
-                }}
+                id='auth-register-password'
+                onChange={handleChange('password')}
                 type={values.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
@@ -269,65 +251,48 @@ const LoginPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
               />
             </FormControl>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel control={<Checkbox />} label='Remember Me' />
-              <Link passHref href='/pages/forget-password'>
-                <LinkStyled>Forgot Password?</LinkStyled>
-              </Link>
-            </Box>
-            <Button
-              fullWidth
-              size='large'
-              type="submit"
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-            /* onClick={() => router.push('/')}*/
-            >
-              Login
+            <FormControl fullWidth>
+              <InputLabel htmlFor='auth-register-password'>Confirm Password</InputLabel>
+              <OutlinedInput
+                label='Confirm Password'
+                value={values.confirmPassword}
+                id='auth-register-password'
+                onChange={handleChange('confirmPassword')}
+                type={values.showConfirmPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickConfirmPassword}
+                      onMouseDown={handleMouseDownConfirmePassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showConfirmPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox />}
+              label={
+                <Fragment>
+                  <span>I agree to </span>
+                  <Link href='/' passHref>
+                    <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
+                  </Link>
+                </Fragment>
+              }
+            />
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
+              Submit
             </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2' sx={{ marginRight: 2 }}>
-                New on our platform?
-              </Typography>
-              <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Create an account</LinkStyled>
-                </Link>
-              </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
-            </Box>
           </form>
         </CardContent>
       </Card>
@@ -335,6 +300,6 @@ const LoginPage = () => {
     </Box>
   )
 }
-LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+NewUserResetPasswordPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default LoginPage
+export default NewUserResetPasswordPage

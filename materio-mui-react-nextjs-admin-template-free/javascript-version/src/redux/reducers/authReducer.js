@@ -20,8 +20,13 @@ import {
   LISTS_OF_USERS_ERROR,
   CHANGE_OLD_PSSSWORD_ERROR,
   CHANGE_OLD_PSSSWORD_SUCCESS,
-  CLEAR_SUCCESS_MESSAGE
-
+  CLEAR_SUCCESS_MESSAGE,
+  CHANGE_NEW_USER_PSSSWORD_ERROR,
+  CHANGE_NEW_USER_PSSSWORD_SUCCESS,
+  LISTS_OF_DEACTIVATED_USERS_ERROR,
+  LISTS_OF_DEACTIVATED_USERS_SUCCESS,
+  UPDATE_USER_STATUS_ERROR,
+  UPDATE_USER_STATUS_SUCCESS
 } from "../constants/authconstant";
 
 const initialState = {
@@ -167,14 +172,16 @@ const authReducer = (state = initialState, action) => {
         ...state,
         usersLists: action.payload.users,
         successMessage: action.payload.success,
-        error: null
+        error: null,
+        loading: null
 
       }
     case LISTS_OF_USERS_ERROR:
       return {
         ...state,
         usersLists: [],
-        error: action.payload
+        error: action.payload,
+        loading: null
       }
     case LOGOUT_SUCCESS:
       return {
@@ -203,11 +210,57 @@ const authReducer = (state = initialState, action) => {
         successMessage: null,
         error: action.payload
       }
+    case CHANGE_NEW_USER_PSSSWORD_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        error: null,
+        loading: false
+      }
+    case CHANGE_NEW_USER_PSSSWORD_ERROR:
+      return {
+        ...state,
+        loading: false,
+        successMessage: null,
+        error: action.payload
+      }
     case CLEAR_SUCCESS_MESSAGE:
       return {
         ...state,
         successMessage: null,
-        error: null
+        error: null,
+        loading: null
+      }
+    case LISTS_OF_DEACTIVATED_USERS_SUCCESS:
+      return {
+        ...state,
+        usersLists: action.payload.users,
+        successMessage: action.payload.success,
+        error: null,
+        loading: null
+
+      }
+    case LISTS_OF_DEACTIVATED_USERS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case UPDATE_USER_STATUS_SUCCESS:
+      const updatedUserId = action.payload.data._id;
+      const updatedUsers = state.usersLists.filter(user => user._id !== updatedUserId);
+      return {
+        ...state,
+        usersLists: updatedUsers.length < state.usersLists.length ? updatedUsers : state.usersLists,
+        successMessage: action.payload,
+        loading: null
+      };
+
+    case UPDATE_USER_STATUS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
       }
     default:
       return state;

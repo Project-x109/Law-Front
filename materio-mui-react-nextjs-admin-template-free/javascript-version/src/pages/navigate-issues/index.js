@@ -18,9 +18,11 @@ const UserLists = () => {
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCsrf())
+    if (!csrfToken) {
+      dispatch(getCsrf())
+    }
     dispatch(getAllIssues(csrfToken, isLoggedIn))
-  }, [dispatch]);
+  }, [dispatch, csrfToken, isLoggedIn]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error)

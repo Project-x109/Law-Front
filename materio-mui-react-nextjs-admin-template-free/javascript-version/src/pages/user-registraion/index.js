@@ -32,6 +32,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { validateForm } from 'src/@core/utils/validation'
 import Loader from 'src/@core/utils/loader'
+import { clearSuccessMessage } from 'src/redux/actions/authActions'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
@@ -66,10 +67,10 @@ const FormLayoutsSeparator = () => {
     setFormValues({ ...formValues, dateOfBirth: date });
   };
   useEffect(() => {
-    if (error) {
+    if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()]);
+  }, [dispatch, csrfToken]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -113,10 +114,9 @@ const FormLayoutsSeparator = () => {
         password: '',
         ConfirmPassword: ''
       })
+      dispatch(clearSuccessMessage())
     }
   }, [error, successMessage]);
-  console.log(error)
-  // Handle Password
   const handlePasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
     handleChange(prop)(event);

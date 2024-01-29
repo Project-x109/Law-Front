@@ -1,24 +1,37 @@
 export const getStatusColor = (status) => {
   switch (status.toLowerCase()) {
     case 'pending':
-      return 'gray'; // Set the color for 'pending' status
+      return '#EFCD00';
     case 'processing':
-      return 'blue'; // Set the color for 'processing' status
+      return '#16B1FF';
     case 'closed':
-      return 'green'; // Set the color for 'closed' status
+      return '#9155FD';
     default:
-      return 'gray'; // Set a default color for unknown statuses
+      return 'gray';
   }
 };
 export const getLevelColor = (status) => {
   switch (status.toLowerCase()) {
     case 'medium':
-      return 'green'; // Set the color for 'pending' status
+      return '#9155FD';
     case 'low':
-      return 'blue'; // Set the color for 'processing' status
+      return '#16B1FF';
     case 'high':
-      return 'red'; // Set the color for 'closed' status
+      return '#FF4C51';
     default:
-      return 'gray'; // Set a default color for unknown statuses
+      return 'gray';
   }
 };
+
+export const getUserStatusColor = (status) => {
+  switch (status.toLowerCase()) {
+    case 'pending':
+      return '#EFCD00';
+    case 'active':
+      return '#16B1FF';
+    case 'blocked':
+      return '#FF4C51'
+    default:
+      return 'gray'
+  }
+}

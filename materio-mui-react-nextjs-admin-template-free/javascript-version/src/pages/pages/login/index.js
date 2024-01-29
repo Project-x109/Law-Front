@@ -96,7 +96,7 @@ const LoginPage = () => {
   });
   const { username, password } = formData;
   useEffect(() => {
-    if (error || successMessage) {
+    if (!csrfToken) {
       dispatch(getCsrf())
     }
   }, [dispatch, getCsrf()])
@@ -119,14 +119,14 @@ const LoginPage = () => {
       username,
       password,
     };
-/*     if (!username || !password) {
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: "Please fill in both fields.",
-      });
-      return;
-    } */
+    /*     if (!username || !password) {
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Please fill in both fields.",
+          });
+          return;
+        } */
     try {
 
       dispatch(login(loginData, csrfToken));

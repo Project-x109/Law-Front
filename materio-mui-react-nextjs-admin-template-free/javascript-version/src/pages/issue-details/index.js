@@ -15,7 +15,6 @@ import { Comment, Information, Details } from 'mdi-material-ui'
 // ** Demo Tabs Imports
 import TabIssue from 'src/views/issue-details/TabIssue'
 import IssueInfo from 'src/views/issue-details/IssueInfo'
-import CommentTab from 'src/views/issue-details/CommentTab'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -92,7 +91,6 @@ const IssueDetails = () => {
           <IssueInfo />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='security'>
-          <CommentTab />
         </TabPanel>
       </TabContext>
     </Card>

@@ -82,7 +82,7 @@ const TabSecurity = () => {
   }
 
   useEffect(() => {
-    if (error) {
+    if (!csrfToken) {
       dispatch(getCsrf())
     }
   }, [dispatch, getCsrf()])
@@ -128,14 +128,14 @@ const TabSecurity = () => {
         return null;
       });
     }
-    if (successMessage && !loading) {
+    if (successMessage?.message && !loading) {
       Swal.fire({
         icon: "success",
         title: "Password Changed Successfully",
         text: successMessage.message,
       });
-      dispatch(clearSuccessMessage())
     }
+    dispatch(clearSuccessMessage())
   }, [error, successMessage, loading, dispatch]);
   return (
     <form onSubmit={handleSubmit}>

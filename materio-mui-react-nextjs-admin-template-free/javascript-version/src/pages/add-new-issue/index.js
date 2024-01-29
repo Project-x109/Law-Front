@@ -71,10 +71,10 @@ const FormLayoutsSeparator = () => {
     { key: 'issueDecisionDate', label: 'Issue Decision Date' },
   ];
   useEffect(() => {
-    if (error) {
+    if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch]);
+  }, [dispatch,getCsrf()]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

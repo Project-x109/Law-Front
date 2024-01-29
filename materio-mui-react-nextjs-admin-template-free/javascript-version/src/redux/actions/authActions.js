@@ -5,8 +5,9 @@ const backendServerURL = "http://localhost:4000";
 import {
   REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,
   LOGIN_LOADING, PROFILE_ERROR, PROFILE_SUCCESS, CSRF_ERROR, CSRF_SUCCESS, LOGOUT_ERROR, LOGOUT_SUCCESS, REGISTER_EMPLOYEE_SUCCESS,
-  REGISTER_EMPLOYEE_ERROR, LISTS_OF_USERS_ERROR, LISTS_OF_USERS_SUCCESS, CHANGE_OLD_PSSSWORD_ERROR, CHANGE_OLD_PSSSWORD_SUCCESS
-  , CLEAR_SUCCESS_MESSAGE
+  REGISTER_EMPLOYEE_ERROR, LISTS_OF_USERS_ERROR, LISTS_OF_USERS_SUCCESS, CHANGE_OLD_PSSSWORD_ERROR, CHANGE_OLD_PSSSWORD_SUCCESS,
+  CLEAR_SUCCESS_MESSAGE, CHANGE_NEW_USER_PSSSWORD_ERROR, CHANGE_NEW_USER_PSSSWORD_SUCCESS, LISTS_OF_DEACTIVATED_USERS_ERROR,
+  LISTS_OF_DEACTIVATED_USERS_SUCCESS, UPDATE_USER_STATUS_ERROR, UPDATE_USER_STATUS_SUCCESS
 } from "../constants/authconstant";
 
 
@@ -293,6 +294,43 @@ export const changeOldPassword = (values, csrfToken, isLoggedIn) => async (dispa
     }
   }
 }
+
+export const changeNewUserPassword = (values, csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING });
+
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const changeNewPasswordResponse = await axios.put(
+      `${backendServerURL}/api/v1/changenewuserpassword`,
+      values,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (changeNewPasswordResponse.data) {
+      dispatch({ type: CHANGE_NEW_USER_PSSSWORD_SUCCESS, payload: changeNewPasswordResponse.data });
+    } else {
+      dispatch({
+        type: CHANGE_NEW_USER_PSSSWORD_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: CHANGE_NEW_USER_PSSSWORD_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: CHANGE_NEW_USER_PSSSWORD_ERROR,
+        payload: "An error occurred while Changing password",
+      });
+    }
+  }
+}
 export const profile = (csrfToken, isLoggedIn) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
@@ -358,6 +396,77 @@ export const allUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
       dispatch({
         type: LISTS_OF_USERS_ERROR,
         payload: "An error occurred while displaying the user",
+      });
+    }
+  }
+}
+
+export const allDeactivatedUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING });
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const listOfDeactivatedUsersResponse = await axios.get(
+      `${backendServerURL}/api/v1/deactivated-users`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (listOfDeactivatedUsersResponse.data) {
+      dispatch({ type: LISTS_OF_DEACTIVATED_USERS_SUCCESS, payload: listOfDeactivatedUsersResponse.data });
+    } else {
+      dispatch({
+        type: LISTS_OF_DEACTIVATED_USERS_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  }
+  catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: LISTS_OF_DEACTIVATED_USERS_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: LISTS_OF_DEACTIVATED_USERS_ERROR,
+        payload: "An error occurred while displaying the user",
+      });
+    }
+  }
+}
+export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING });
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const updateUsersResponse = await axios.put(
+      `${backendServerURL}/api/v1/change-account-status`,
+      all,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    console.log(updateUsersResponse.data)
+    if (updateUsersResponse.data) {
+      dispatch({ type: UPDATE_USER_STATUS_SUCCESS, payload: updateUsersResponse.data });
+    } else {
+      dispatch({
+        type: UPDATE_USER_STATUS_SUCCESS,
+        payload: "Invalid response from the server",
+      });
+    }
+  }
+  catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: UPDATE_USER_STATUS_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: UPDATE_USER_STATUS_ERROR,
+        payload: "An error occurred while updating the user",
       });
     }
   }

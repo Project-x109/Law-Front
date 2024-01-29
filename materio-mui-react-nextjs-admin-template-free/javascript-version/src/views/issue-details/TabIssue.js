@@ -44,11 +44,11 @@ const TabIssue = () => {
   const [visibility, setVisibility] = useState(false);
   const [createdBy, setCreatedBy] = useState('');
   useEffect(() => {
-    if (error) {
+    if (!csrfToken) {
       dispatch(getCsrf());
     }
     dispatch(getIndividualIssue(csrfToken, isLoggedIn, values?.issueId));
-  }, [dispatch, csrfToken, isLoggedIn, values.issueId, error]);
+  }, [dispatch, csrfToken, isLoggedIn, values.issueId]);
   useEffect(() => {
     const { id } = router.query;
     if (id) {

@@ -39,8 +39,10 @@ const UserLayout = ({ children }) => {
    */
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
   useEffect(() => {
-    dispatch(getCsrf())
-  }, [dispatch]);
+    if (!csrfToken) {
+      dispatch(getCsrf())
+    }
+  }, [dispatch, getCsrf()]);
   useEffect(() => {
     if (csrfToken && isLoggedIn) {
       dispatch(profile(csrfToken, isLoggedIn));

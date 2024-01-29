@@ -56,6 +56,14 @@ const navigation = (userRole) => {
         title: 'User Lists',
         icon: AccountMultiple,
         path: '/lists-of-users'
+      },
+      {
+        sectionTitle: 'Admin Pages'
+      },
+      {
+        title: 'Deavtivated Accounts',
+        icon: Account,
+        path: '/deactivated-accounts'
       }
 
     );

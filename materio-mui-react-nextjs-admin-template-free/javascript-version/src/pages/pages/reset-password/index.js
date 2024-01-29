@@ -88,7 +88,9 @@ const ResetPasswordPage = () => {
     }
   }, [router.query]);
   useEffect(() => {
-    dispatch(getCsrf())
+    if(!csrfToken){
+      dispatch(getCsrf())
+    }
   }, [dispatch, getCsrf()])
 
   const handleChange = prop => event => {
