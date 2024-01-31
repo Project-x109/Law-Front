@@ -38,6 +38,7 @@ const initialState = {
   loggedin: false,
   loading: false,
   userRole: null,
+  deactivatedusersLists: null
 
 };
 
@@ -167,22 +168,6 @@ const authReducer = (state = initialState, action) => {
         user: null,
         loading: false
       };
-    case LISTS_OF_USERS_SUCCESS:
-      return {
-        ...state,
-        usersLists: action.payload.users,
-        successMessage: action.payload.success,
-        error: null,
-        loading: null
-
-      }
-    case LISTS_OF_USERS_ERROR:
-      return {
-        ...state,
-        usersLists: [],
-        error: action.payload,
-        loading: null
-      }
     case LOGOUT_SUCCESS:
       return {
         ...state,
@@ -229,12 +214,29 @@ const authReducer = (state = initialState, action) => {
         ...state,
         successMessage: null,
         error: null,
+        loading: null,
+        usersLists: [],
+      }
+    case LISTS_OF_USERS_SUCCESS:
+      return {
+        ...state,
+        usersLists: action.payload.users,
+        successMessage: action.payload.success,
+        error: null,
+        loading: null
+
+      }
+    case LISTS_OF_USERS_ERROR:
+      return {
+        ...state,
+        usersLists: [],
+        error: action.payload,
         loading: null
       }
     case LISTS_OF_DEACTIVATED_USERS_SUCCESS:
       return {
         ...state,
-        usersLists: action.payload.users,
+        deactivatedusersLists: action.payload.users,
         successMessage: action.payload.success,
         error: null,
         loading: null
@@ -248,10 +250,10 @@ const authReducer = (state = initialState, action) => {
       }
     case UPDATE_USER_STATUS_SUCCESS:
       const updatedUserId = action.payload.data._id;
-      const updatedUsers = state.usersLists.filter(user => user._id !== updatedUserId);
+      const updatedUsers = state.deactivatedusersLists.filter(user => user._id !== updatedUserId);
       return {
         ...state,
-        usersLists: updatedUsers.length < state.usersLists.length ? updatedUsers : state.usersLists,
+        deactivatedusersLists: updatedUsers.length < state.deactivatedusersLists.length ? updatedUsers : state.deactivatedusersLists,
         successMessage: action.payload,
         loading: null
       };
@@ -259,6 +261,7 @@ const authReducer = (state = initialState, action) => {
     case UPDATE_USER_STATUS_ERROR:
       return {
         ...state,
+        deactivatedusersLists: state.deactivatedusersLists,
         error: action.payload,
         loading: null
       }

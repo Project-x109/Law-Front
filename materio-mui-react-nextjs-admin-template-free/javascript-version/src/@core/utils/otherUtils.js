@@ -1,3 +1,4 @@
+import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
 export const getStatusColor = (status) => {
   switch (status.toLowerCase()) {
     case 'pending':
@@ -35,3 +36,30 @@ export const getUserStatusColor = (status) => {
       return 'gray'
   }
 }
+export const StatusRadio = ({ status, onChange }) => {
+  const handleChange = (event) => {
+    onChange(event.target.value);
+  };
+
+  return (
+    <RadioGroup row value={status} onChange={handleChange}>
+      <FormControlLabel value="pending" control={<Radio />} label="Pending" />
+      <FormControlLabel value="active" control={<Radio />} label="Active" />
+      <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+    </RadioGroup>
+  );
+};
+
+export const StatusRadioIssue = ({ status, onChange }) => {
+  const handleChange = (event) => {
+    onChange(event.target.value);
+  };
+
+  return (
+    <RadioGroup row value={status} onChange={handleChange}>
+      <FormControlLabel value="pending" control={<Radio />} label="Pending" />
+      <FormControlLabel value="processing" control={<Radio />} label="Processing" />
+      <FormControlLabel value="closed" control={<Radio />} label="Closed" />
+    </RadioGroup>
+  );
+};

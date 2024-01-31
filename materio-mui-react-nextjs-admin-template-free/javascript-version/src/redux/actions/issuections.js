@@ -11,7 +11,13 @@ import {
   UPDATE_ISSUE_ERROR,
   UPDATE_ISSUE_SUCCESS,
   FETCH_SPECIFIC_ISSUES_ERROR,
-  FETCH_SPECIFIC_ISSUES_SUCCESS
+  FETCH_SPECIFIC_ISSUES_SUCCESS,
+  CHANGE_ISSUE_STATUS_ERROR,
+  CHANGE_ISSUE_STATUS_SUCCESS,
+  GET_RECENT_ACTIVITIES_ERROR,
+  GET_RECENT_ACTIVITIES_SUCCESS,
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS,
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR
 
 } from "../constants/issueConstant";
 
@@ -163,7 +169,6 @@ export const updateIssue = (csrfToken, isLoggedIn, issueId, formValues) => async
 export const getUserBasedIssues = (csrfToken, isLoggedIn) => async (dispatch) => {
   dispatch({ type: LOGIN_LOADING_ISSUE });
   try {
-    // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
       "X-CSRF-Token": csrfToken,
@@ -190,6 +195,111 @@ export const getUserBasedIssues = (csrfToken, isLoggedIn) => async (dispatch) =>
     } else {
       dispatch({
         type: FETCH_SPECIFIC_ISSUES_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_LOADING_ISSUE });
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const updateStatusResponse = await axios.put(
+      `${backendServerURL}/changeissuestatus`,
+      all,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (updateStatusResponse.data) {
+      dispatch({ type: CHANGE_ISSUE_STATUS_SUCCESS, payload: updateStatusResponse.data });
+    } else {
+      dispatch({
+        type: CHANGE_ISSUE_STATUS_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  }
+  catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: CHANGE_ISSUE_STATUS_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: CHANGE_ISSUE_STATUS_ERROR,
+        payload: "An error occurred while updating the issue",
+      });
+    }
+  }
+}
+
+export const getRecentActivities = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const fetchLatestActivitiesResponse = await axios.get(
+      `${backendServerURL}/getRecentActivities`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (fetchLatestActivitiesResponse.data) {
+      dispatch({ type: GET_RECENT_ACTIVITIES_SUCCESS, payload: fetchLatestActivitiesResponse.data });
+    } else {
+      dispatch({
+        type: GET_RECENT_ACTIVITIES_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_RECENT_ACTIVITIES_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_RECENT_ACTIVITIES_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getRecentActivity = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const fetchLatestActivityResponse = await axios.get(
+      `${backendServerURL}/getrecentactivity`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (fetchLatestActivityResponse.data) {
+      dispatch({ type: GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS, payload: fetchLatestActivityResponse.data });
+    } else {
+      dispatch({
+        type: GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
         payload: "An error occurred while Feching data",
       });
     }

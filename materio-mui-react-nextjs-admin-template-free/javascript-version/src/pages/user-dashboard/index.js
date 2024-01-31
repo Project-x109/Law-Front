@@ -21,8 +21,19 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+import { useDispatch,useSelector } from 'react-redux'
+import { getCsrf } from 'src/redux/actions/authActions'
+import { useEffect } from 'react'
 
 const Dashboard = () => {
+  const { csrfToken } = useSelector((state) => state.issue);
+  const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (!csrfToken) {
+      dispatch(getCsrf());
+    }
+  }, [dispatch, csrfToken, isLoggedIn]);
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
@@ -91,7 +102,7 @@ const Dashboard = () => {
           <DepositWithdraw />
         </Grid>
         <Grid item xs={12}>
-          <Table />
+          <Table csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
       </Grid>
     </ApexChartWrapper>

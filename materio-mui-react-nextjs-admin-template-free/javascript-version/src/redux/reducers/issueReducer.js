@@ -10,6 +10,12 @@ import {
   UPDATE_ISSUE_SUCCESS,
   FETCH_SPECIFIC_ISSUES_ERROR,
   FETCH_SPECIFIC_ISSUES_SUCCESS,
+  CHANGE_ISSUE_STATUS_ERROR,
+  CHANGE_ISSUE_STATUS_SUCCESS,
+  GET_RECENT_ACTIVITIES_ERROR,
+  GET_RECENT_ACTIVITIES_SUCCESS,
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS
 
 
 } from "../constants/issueConstant";
@@ -21,7 +27,9 @@ const initialState = {
   loading: false,
   issues: null,
   issue: null,
-  userSpecificIssue: null
+  userSpecificIssue: null,
+  activities: null,
+  activity: null
 };
 
 const issueReducer = (state = initialState, action) => {
@@ -96,12 +104,57 @@ const issueReducer = (state = initialState, action) => {
         error: action.payload,
         loading: false
       }
+    case CHANGE_ISSUE_STATUS_SUCCESS:
+      const updatedIssueId = action.payload.lawIssue._id;
+      const updatedIssues = state.userSpecificIssue.map(issue =>
+        issue._id === updatedIssueId ? action.payload.lawIssue : issue
+      );
+      return {
+        ...state,
+        userSpecificIssue: updatedIssues,
+        successMessage: action.payload,
+        loading: null
+      };
+
+    case CHANGE_ISSUE_STATUS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_RECENT_ACTIVITIES_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        activities: action.payload.recentActivities,
+        loading: null
+      }
+    case GET_RECENT_ACTIVITIES_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        activity: action.payload.recentActivities,
+        loading: null
+      }
+    case GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
     case CLEAR_SUCCESS_MESSAGE:
       return {
         ...state,
         error: null,
         successMessage: null
       }
+
     default: {
       return state
     }

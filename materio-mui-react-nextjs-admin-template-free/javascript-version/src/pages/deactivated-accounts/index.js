@@ -10,15 +10,14 @@ import { allDeactivatedUsers, getCsrf, updateStatus } from 'src/redux/actions/au
 import { ToastContainer, toast } from 'react-toastify';
 import { clearSuccessMessage } from 'src/redux/actions/authActions';
 import Loader from 'src/@core/utils/loader';
-import { getUserStatusColor } from 'src/@core/utils/otherUtils';
+import { getUserStatusColor,StatusRadio } from 'src/@core/utils/otherUtils';
 import { Chip } from '@mui/material';
-import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { OpenInNew } from 'mdi-material-ui';
 import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css';
 const DeacivatedUserLists = () => {
-  const { csrfToken, error, usersLists, loading, successMessage } = useSelector((state) => state.auth);
+  const { csrfToken, error, deactivatedusersLists, loading, successMessage } = useSelector((state) => state.auth);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -37,10 +36,11 @@ const DeacivatedUserLists = () => {
     if (error) {
       toast.error(error?.error);
     }
+
     dispatch(clearSuccessMessage())
   }, [error]);
 
-  const userLists = usersLists?.map((item) => ({
+  const userLists = deactivatedusersLists?.map((item) => ({
     id: item?._id,
     username: item?.username,
     firstName: item?.firstName,
@@ -97,19 +97,7 @@ const DeacivatedUserLists = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-  const StatusRadio = ({ status, onChange }) => {
-    const handleChange = (event) => {
-      onChange(event.target.value);
-    };
 
-    return (
-      <RadioGroup row value={status} onChange={handleChange}>
-        <FormControlLabel value="pending" control={<Radio />} label="Pending" />
-        <FormControlLabel value="active" control={<Radio />} label="Active" />
-        <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
-      </RadioGroup>
-    );
-  };
   const handleStatusChange = (id, currentStatus) => {
     setAll({ status: currentStatus, id: id });
     handleOpenModal();

@@ -9,6 +9,12 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { getRecentActivities, getRecentActivity } from 'src/redux/actions/issuections'
+import { clearSuccessMessage } from 'src/redux/actions/authActions'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const rows = [
   {
@@ -86,56 +92,130 @@ const rows = [
 ]
 
 const statusObj = {
-  applied: { color: 'info' },
-  rejected: { color: 'error' },
-  current: { color: 'primary' },
-  resigned: { color: 'warning' },
-  professional: { color: 'success' }
+  pending: { color: 'info' },
+  processing: { color: 'error' },
+  closed: { color: 'primary' },
+  high: { color: 'warning' },
+  medium: { color: 'success' },
+  low: { color: 'primary' }
 }
 
-const DashboardTable = () => {
+const DashboardTable = ({ csrfToken, isLoggedIn }) => {
+  const { error, activities, loading, successMessage, activity } = useSelector((state) => state.issue);
+  const { user, userRole } = useSelector((state) => state.auth)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (user?.role === "admin" || userRole === "admin") {
+      dispatch(getRecentActivities(csrfToken, isLoggedIn));
+    } else {
+      dispatch(getRecentActivity(csrfToken, isLoggedIn))
+    }
+
+  }, [dispatch, csrfToken, isLoggedIn]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error);
+    }
+    dispatch(clearSuccessMessage())
+  }, [error, successMessage]);
   return (
     <Card>
+      <ToastContainer />
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Salary</TableCell>
-              <TableCell>Age</TableCell>
+              <TableCell>Issue Type</TableCell>
+              <TableCell>Issue Region</TableCell>
+              <TableCell>Legal Motion</TableCell>
+              <TableCell>Created By</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Issue Level</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow hover key={row.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
-                <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.name}</Typography>
-                    <Typography variant='caption'>{row.designation}</Typography>
-                  </Box>
-                </TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.salary}</TableCell>
-                <TableCell>{row.age}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={row.status}
-                    color={statusObj[row.status].color}
-                    sx={{
-                      height: 24,
-                      fontSize: '0.75rem',
-                      textTransform: 'capitalize',
-                      '& .MuiChip-label': { fontWeight: 500 }
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+          {
+            user?.role === 'admin' ?
+              <TableBody>
+                {activities?.map(row => (
+                  <TableRow hover key={row.issueId} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+                    <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.issueType.toUpperCase()}</Typography>
+                        <Typography variant='caption'>{"The Issue is Raised By " + row.requestingDepartment.toUpperCase() + ' Department'}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{row.issueRegion.toUpperCase()}</TableCell>
+                    <TableCell>{row?.legalMotions?.toUpperCase()}</TableCell>
+                    <TableCell>{row?.createdBy?.firstName?.toUpperCase()}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={row.status}
+                        color={statusObj[row.status].color}
+                        sx={{
+                          height: 24,
+                          fontSize: '0.75rem',
+                          textTransform: 'capitalize',
+                          '& .MuiChip-label': { fontWeight: 500 }
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={row.issueLevel}
+                        color={statusObj[row?.issueLevel]?.color}
+                        sx={{
+                          height: 24,
+                          fontSize: '0.75rem',
+                          textTransform: 'capitalize',
+                          '& .MuiChip-label': { fontWeight: 500 }
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody> :
+              <TableBody>
+                {activity?.map(row => (
+                  <TableRow hover key={row.issueId} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+                    <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.issueType.toUpperCase()}</Typography>
+                        <Typography variant='caption'>{"The Issue is Raised By " + row.requestingDepartment.toUpperCase() + ' Department'}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{row.issueRegion.toUpperCase()}</TableCell>
+                    <TableCell>{row?.legalMotions?.toUpperCase()}</TableCell>
+                    <TableCell>{row?.createdBy?.firstName?.toUpperCase()}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={row.status}
+                        color={statusObj[row.status].color}
+                        sx={{
+                          height: 24,
+                          fontSize: '0.75rem',
+                          textTransform: 'capitalize',
+                          '& .MuiChip-label': { fontWeight: 500 }
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={row.issueLevel}
+                        color={statusObj[row?.issueLevel]?.color}
+                        sx={{
+                          height: 24,
+                          fontSize: '0.75rem',
+                          textTransform: 'capitalize',
+                          '& .MuiChip-label': { fontWeight: 500 }
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+
+          }
         </Table>
       </TableContainer>
     </Card>

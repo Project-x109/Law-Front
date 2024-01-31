@@ -450,12 +450,11 @@ export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => 
         headers
       }
     );
-    console.log(updateUsersResponse.data)
     if (updateUsersResponse.data) {
       dispatch({ type: UPDATE_USER_STATUS_SUCCESS, payload: updateUsersResponse.data });
     } else {
       dispatch({
-        type: UPDATE_USER_STATUS_SUCCESS,
+        type: UPDATE_USER_STATUS_ERROR,
         payload: "Invalid response from the server",
       });
     }
