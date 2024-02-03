@@ -21,7 +21,7 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getCsrf } from 'src/redux/actions/authActions'
 import { useEffect } from 'react'
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
           <Trophy />
         </Grid>
         <Grid item xs={12} md={8}>
-          <StatisticsCard />
+          <StatisticsCard csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <WeeklyOverview />
@@ -96,10 +96,10 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <SalesByCountries />
+          <SalesByCountries csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12} md={12} lg={8}>
-          <DepositWithdraw />
+          <DepositWithdraw csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12}>
           <Table csrfToken={csrfToken} isLoggedIn={isLoggedIn} />

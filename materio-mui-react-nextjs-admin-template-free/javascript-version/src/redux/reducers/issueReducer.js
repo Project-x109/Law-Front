@@ -15,7 +15,15 @@ import {
   GET_RECENT_ACTIVITIES_ERROR,
   GET_RECENT_ACTIVITIES_SUCCESS,
   GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
-  GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS,
+  GET_USER_DASHBOARD_SUMMERY_SUCCESS,
+  GET_USER_DASHBOARD_SUMMERY_ERROR,
+  GET_ADMIN_DASHBOARD_SUMMERY_ERROR,
+  GET_ADMIN_DASHBOARD_SUMMERY_SUCCESS,
+  GET_TOTAL_ISSUE_BY_USER_ERROR,
+  GET_TOTAL_ISSUE_BY_USER_SUCCESS,
+  GET_ALL_USER_PERFORMAANCE_ERROR,
+  GET_ALL_USER_PERFORMAANCE_SUCCESS
 
 
 } from "../constants/issueConstant";
@@ -29,7 +37,11 @@ const initialState = {
   issue: null,
   userSpecificIssue: null,
   activities: null,
-  activity: null
+  activity: null,
+  userSummery: null,
+  adminSummery: null,
+  totalIssueByUser: null,
+  userPerformance: null
 };
 
 const issueReducer = (state = initialState, action) => {
@@ -148,13 +160,64 @@ const issueReducer = (state = initialState, action) => {
         error: action.payload,
         loading: null
       }
+    case GET_USER_DASHBOARD_SUMMERY_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        userSummery: action.payload.summary,
+        loading: null
+      }
+    case GET_USER_DASHBOARD_SUMMERY_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_ADMIN_DASHBOARD_SUMMERY_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        adminSummery: action.payload.summary,
+        loading: null
+      }
+    case GET_ADMIN_DASHBOARD_SUMMERY_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
     case CLEAR_SUCCESS_MESSAGE:
       return {
         ...state,
         error: null,
         successMessage: null
       }
-
+    case GET_TOTAL_ISSUE_BY_USER_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        totalIssueByUser: action.payload.data,
+        loading: null
+      }
+    case GET_TOTAL_ISSUE_BY_USER_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null,
+      }
+    case GET_ALL_USER_PERFORMAANCE_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        userPerformances: action.payload.topUserPerformances,
+        loading: null
+      }
+    case GET_ALL_USER_PERFORMAANCE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
     default: {
       return state
     }

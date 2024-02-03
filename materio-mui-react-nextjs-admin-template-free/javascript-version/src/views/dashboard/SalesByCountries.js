@@ -12,64 +12,33 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 
-const data = [
-  {
-    sales: '894k',
-    trendDir: 'up',
-    subtitle: 'USA',
-    title: '$8,656k',
-    avatarText: 'US',
-    trendNumber: '25.8%',
-    avatarColor: 'success',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '645k',
-    subtitle: 'UK',
-    trendDir: 'down',
-    title: '$2,415k',
-    avatarText: 'UK',
-    trendNumber: '6.2%',
-    avatarColor: 'error',
-    trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '148k',
-    title: '$865k',
-    trendDir: 'up',
-    avatarText: 'IN',
-    subtitle: 'India',
-    trendNumber: '12.4%',
-    avatarColor: 'warning',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '86k',
-    title: '$745k',
-    trendDir: 'down',
-    avatarText: 'JA',
-    subtitle: 'Japan',
-    trendNumber: '11.9%',
-    avatarColor: 'secondary',
-    trend: <ChevronDown sx={{ color: 'error.main', fontWeight: 600 }} />
-  },
-  {
-    sales: '42k',
-    title: '$45k',
-    trendDir: 'up',
-    avatarText: 'KO',
-    subtitle: 'Korea',
-    trendNumber: '16.2%',
-    avatarColor: 'error',
-    trend: <ChevronUp sx={{ color: 'success.main', fontWeight: 600 }} />
-  }
-]
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getTotalIssuesByUser } from 'src/redux/actions/issuections'
+import { clearSuccessMessage } from 'src/redux/actions/authActions'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getRandomColor } from 'src/@core/utils/otherUtils'
 
-const SalesByCountries = () => {
+const SalesByCountries = ({ csrfToken, isLoggedIn }) => {
+  const { error, successMessage, totalIssueByUser } = useSelector((state) => state.issue);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getTotalIssuesByUser(csrfToken, isLoggedIn))
+  }, [dispatch, csrfToken, isLoggedIn]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error);
+    }
+    dispatch(clearSuccessMessage())
+  }, [error, successMessage]);
+
+
   return (
     <Card>
+      <ToastContainer />
       <CardHeader
-        title='Sales by Countries'
+        title='Top Five Issue Handlers'
         titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         action={
           <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
@@ -78,14 +47,14 @@ const SalesByCountries = () => {
         }
       />
       <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
-        {data.map((item, index) => {
+        {totalIssueByUser?.map((item, index) => {
           return (
             <Box
-              key={item.title}
+              key={item._id}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                ...(index !== data.length - 1 ? { mb: 5.875 } : {})
+                ...(index !== totalIssueByUser.length - 1 ? { mb: 5.875 } : {})
               }}
             >
               <Avatar
@@ -95,10 +64,10 @@ const SalesByCountries = () => {
                   marginRight: 3,
                   fontSize: '1rem',
                   color: 'common.white',
-                  backgroundColor: `${item.avatarColor}.main`
+                  backgroundColor: `${getRandomColor()}.main`
                 }}
               >
-                {item.avatarText}
+                {item?.initials}
               </Avatar>
 
               <Box
@@ -112,32 +81,19 @@ const SalesByCountries = () => {
               >
                 <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex' }}>
-                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item.title}</Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      {item.trend}
-                      <Typography
-                        variant='caption'
-                        sx={{
-                          fontWeight: 600,
-                          lineHeight: 1.5,
-                          color: item.trendDir === 'down' ? 'error.main' : 'success.main'
-                        }}
-                      >
-                        {item.trendNumber}
-                      </Typography>
-                    </Box>
+                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item?.totalIssues + " Issues"}</Typography>
                   </Box>
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    {item.subtitle}
+                    {"Created By " + item?._id?.firstName + " " + item?._id?.lastName}
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', textAlign: 'end', flexDirection: 'column' }}>
                   <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.72, letterSpacing: '0.22px' }}>
-                    {item.sales}
+                    {"Role"}
                   </Typography>
                   <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
-                    Sales
+                    {item?._id?.role}
                   </Typography>
                 </Box>
               </Box>

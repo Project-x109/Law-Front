@@ -26,7 +26,7 @@ import { getCsrf } from 'src/redux/actions/authActions'
 import { useEffect } from 'react'
 
 const Dashboard = () => {
-  const { csrfToken } = useSelector((state) => state.issue);
+  const { csrfToken } = useSelector((state) => state.auth);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch()
   useEffect(() => {
@@ -43,7 +43,7 @@ const Dashboard = () => {
             <Trophy />
           </Grid>
           <Grid item xs={12} md={8}>
-            <StatisticsCard />
+            <StatisticsCard csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <WeeklyOverview />
@@ -98,10 +98,10 @@ const Dashboard = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <SalesByCountries />
+            <SalesByCountries csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
           </Grid>
           <Grid item xs={12} md={12} lg={8}>
-            <DepositWithdraw />
+            <DepositWithdraw csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
           </Grid>
           <Grid item xs={12}>
             <Table csrfToken={csrfToken} isLoggedIn={isLoggedIn} />

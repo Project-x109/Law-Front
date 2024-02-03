@@ -63,3 +63,9 @@ export const StatusRadioIssue = ({ status, onChange }) => {
     </RadioGroup>
   );
 };
+
+export const getRandomColor = () => {
+  const colors = ['success', 'error', 'warning', 'info', 'primary', 'secondary'];
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+};

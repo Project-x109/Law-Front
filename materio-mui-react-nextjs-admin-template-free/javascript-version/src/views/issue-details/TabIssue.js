@@ -253,7 +253,7 @@ const TabIssue = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth readOnly={!visibility} label='Issue Raising Office' value={formValues.issueRaisingOffice} defaultValue='ABC Pvt. Ltd.' />
+            <TextField fullWidth onChange={(e) => { handleChangeFormValues('issueRaisingOffice')(e) }} readOnly={!visibility} label='Issue Raising Office' value={formValues.issueRaisingOffice} defaultValue='ABC Pvt. Ltd.' />
           </Grid>
 
 
@@ -280,7 +280,7 @@ const TabIssue = () => {
 
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Issue Raising Officer' readOnly value={formValues.issueRaisingOfficer} defaultValue='ABC Pvt. Ltd.' />
+            <TextField fullWidth label='Issue Raising Officer' onChange={(e) => { handleChangeFormValues('issueRaisingOfficer')(e) }}  readOnly value={formValues.issueRaisingOfficer} defaultValue='ABC Pvt. Ltd.' />
           </Grid>
 
 

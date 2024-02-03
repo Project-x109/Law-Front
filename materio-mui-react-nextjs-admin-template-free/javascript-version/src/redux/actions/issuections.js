@@ -17,7 +17,15 @@ import {
   GET_RECENT_ACTIVITIES_ERROR,
   GET_RECENT_ACTIVITIES_SUCCESS,
   GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS,
-  GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR
+  GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
+  GET_USER_DASHBOARD_SUMMERY_SUCCESS,
+  GET_USER_DASHBOARD_SUMMERY_ERROR,
+  GET_ADMIN_DASHBOARD_SUMMERY_ERROR,
+  GET_ADMIN_DASHBOARD_SUMMERY_SUCCESS,
+  GET_TOTAL_ISSUE_BY_USER_ERROR,
+  GET_TOTAL_ISSUE_BY_USER_SUCCESS,
+  GET_ALL_USER_PERFORMAANCE_ERROR,
+  GET_ALL_USER_PERFORMAANCE_SUCCESS
 
 } from "../constants/issueConstant";
 
@@ -300,6 +308,145 @@ export const getRecentActivity = (csrfToken, isLoggedIn) => async (dispatch) => 
     } else {
       dispatch({
         type: GET_USER_SPECIFIC_RECENT_ACTIVITY_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getUserDashboardSummary = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const getuserdashboardsummaryResponse = await axios.get(
+      `${backendServerURL}/getuserdashboardsummary`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getuserdashboardsummaryResponse.data) {
+      dispatch({ type: GET_USER_DASHBOARD_SUMMERY_SUCCESS, payload: getuserdashboardsummaryResponse.data });
+    } else {
+      dispatch({
+        type: GET_USER_DASHBOARD_SUMMERY_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_USER_DASHBOARD_SUMMERY_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_USER_DASHBOARD_SUMMERY_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getDashboardSummary = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const getdashboardsummaryResponse = await axios.get(
+      `${backendServerURL}/getdashboardsummery`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getdashboardsummaryResponse.data) {
+      dispatch({ type: GET_ADMIN_DASHBOARD_SUMMERY_SUCCESS, payload: getdashboardsummaryResponse.data });
+    } else {
+      dispatch({
+        type: GET_ADMIN_DASHBOARD_SUMMERY_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_ADMIN_DASHBOARD_SUMMERY_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_ADMIN_DASHBOARD_SUMMERY_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+export const getTotalIssuesByUser = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const getTotalIssueByUserResponse = await axios.get(
+      `${backendServerURL}/total-issues-by-user`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getTotalIssueByUserResponse.data) {
+      dispatch({ type: GET_TOTAL_ISSUE_BY_USER_SUCCESS, payload: getTotalIssueByUserResponse.data });
+    } else {
+      dispatch({
+        type: GET_TOTAL_ISSUE_BY_USER_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_TOTAL_ISSUE_BY_USER_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_TOTAL_ISSUE_BY_USER_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+export const getAllUserPerformances = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+
+    const getAllUserPerformanceResponse = await axios.get(
+      `${backendServerURL}/getalluserperformances`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    console.log(getAllUserPerformanceResponse.data)
+    if (getAllUserPerformanceResponse.data) {
+      dispatch({ type: GET_ALL_USER_PERFORMAANCE_SUCCESS, payload: getAllUserPerformanceResponse.data });
+    } else {
+      dispatch({
+        type: GET_ALL_USER_PERFORMAANCE_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_ALL_USER_PERFORMAANCE_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_ALL_USER_PERFORMAANCE_ERROR,
         payload: "An error occurred while Feching data",
       });
     }
