@@ -472,5 +472,5 @@ export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => 
 }
 
 export const clearSuccessMessage = () => async (dispatch) => {
-  dispatch({ type: CLEAR_SUCCESS_MESSAGE, })
+  dispatch({ type: CLEAR_SUCCESS_MESSAGE })
 };

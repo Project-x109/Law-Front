@@ -25,7 +25,13 @@ import {
   GET_TOTAL_ISSUE_BY_USER_ERROR,
   GET_TOTAL_ISSUE_BY_USER_SUCCESS,
   GET_ALL_USER_PERFORMAANCE_ERROR,
-  GET_ALL_USER_PERFORMAANCE_SUCCESS
+  GET_ALL_USER_PERFORMAANCE_SUCCESS,
+  GET_WEEKELY_REVIEW_ERROR,
+  GET_WEEKELY_REVIEW_SUCCESS,
+  GET_ISSUE_LEVEL_COUNT_ERROR,
+  GET_ISSUE_LEVEL_COUNT_SUCCESS,
+  GET_DEPARTMENT_WISE_ANALYSIS_ERROR,
+  GET_DEPARTMENT_WISE_ANALYSIS_SUCCESS
 
 } from "../constants/issueConstant";
 
@@ -432,7 +438,6 @@ export const getAllUserPerformances = (csrfToken, isLoggedIn) => async (dispatch
         headers
       }
     );
-    console.log(getAllUserPerformanceResponse.data)
     if (getAllUserPerformanceResponse.data) {
       dispatch({ type: GET_ALL_USER_PERFORMAANCE_SUCCESS, payload: getAllUserPerformanceResponse.data });
     } else {
@@ -447,6 +452,108 @@ export const getAllUserPerformances = (csrfToken, isLoggedIn) => async (dispatch
     } else {
       dispatch({
         type: GET_ALL_USER_PERFORMAANCE_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getWeeklyReview = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const getWeeklyResponse = await axios.get(
+      `${backendServerURL}/get-weekly-review`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getWeeklyResponse.data) {
+      dispatch({ type: GET_WEEKELY_REVIEW_SUCCESS, payload: getWeeklyResponse.data });
+    } else {
+      dispatch({
+        type: GET_WEEKELY_REVIEW_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_WEEKELY_REVIEW_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_WEEKELY_REVIEW_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getIssueLevelCounts = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const getIssueLevelCountResponse = await axios.get(
+      `${backendServerURL}/priority-issues`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getIssueLevelCountResponse.data) {
+      dispatch({ type: GET_ISSUE_LEVEL_COUNT_SUCCESS, payload: getIssueLevelCountResponse.data });
+    } else {
+      dispatch({
+        type: GET_ISSUE_LEVEL_COUNT_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_ISSUE_LEVEL_COUNT_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_ISSUE_LEVEL_COUNT_ERROR,
+        payload: "An error occurred while Feching data",
+      });
+    }
+  }
+}
+
+export const getDepartmentWiseAnalysis = (csrfToken, isLoggedIn) => async (dispatch) => {
+  dispatch({ type: LOGIN_LOADING_ISSUE });
+  try {
+    const headers = {
+      'Authorization': `${isLoggedIn}`,
+      "X-CSRF-Token": csrfToken,
+    };
+    const getDepartmentWiseResponse = await axios.get(
+      `${backendServerURL}/get-department-wise-analyis`,
+      {
+        withCredentials: true,
+        headers
+      }
+    );
+    if (getDepartmentWiseResponse.data) {
+      dispatch({ type: GET_DEPARTMENT_WISE_ANALYSIS_SUCCESS, payload: getDepartmentWiseResponse.data });
+    } else {
+      dispatch({
+        type: GET_DEPARTMENT_WISE_ANALYSIS_ERROR,
+        payload: "Invalid response from the server",
+      });
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      dispatch({ type: GET_DEPARTMENT_WISE_ANALYSIS_ERROR, payload: error.response.data });
+    } else {
+      dispatch({
+        type: GET_DEPARTMENT_WISE_ANALYSIS_ERROR,
         payload: "An error occurred while Feching data",
       });
     }

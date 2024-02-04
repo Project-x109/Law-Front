@@ -22,20 +22,31 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCsrf } from 'src/redux/actions/authActions'
 import { useEffect } from 'react'
-
+import { getCsrf, clearSuccessMessage } from 'src/redux/actions/authActions'
+import { getIssueLevelCounts } from 'src/redux/actions/issuections'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Dashboard = () => {
   const { csrfToken } = useSelector((state) => state.issue);
+  const { issueLevelCount, error, successMessage } = useSelector((state) => state.issue);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch()
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf());
     }
+    dispatch(getIssueLevelCounts(csrfToken, isLoggedIn))
   }, [dispatch, csrfToken, isLoggedIn]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error);
+    }
+    dispatch(clearSuccessMessage())
+  }, [error, successMessage]);
   return (
     <ApexChartWrapper>
+      <ToastContainer />
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <Trophy />
@@ -44,55 +55,56 @@ const Dashboard = () => {
           <StatisticsCard csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <WeeklyOverview />
+          <WeeklyOverview csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <TotalEarning />
+          <TotalEarning csrfToken={csrfToken} isLoggedIn={isLoggedIn} />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <Grid container spacing={6}>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='$25.6k'
+                stats={issueLevelCount?.high}
                 icon={<Poll />}
                 color='success'
-                trendNumber='+42%'
-                title='Total Profit'
+                trendNumber='issues'
+                title='High Level'
                 subtitle='Weekly Profit'
               />
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='$78'
-                title='Refunds'
+                stats={issueLevelCount?.low}
+                title='Low Level'
                 trend='negative'
                 color='secondary'
-                trendNumber='-15%'
+                trendNumber='issues'
                 subtitle='Past Month'
                 icon={<CurrencyUsd />}
               />
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='862'
+                stats={issueLevelCount?.medium}
+                title='Medium Level'
                 trend='negative'
-                trendNumber='-18%'
-                title='New Project'
+                trendNumber='issues'
                 subtitle='Yearly Project'
                 icon={<BriefcaseVariantOutline />}
               />
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='15'
+                stats={issueLevelCount?.high + issueLevelCount?.medium + issueLevelCount?.low}
                 color='warning'
                 trend='negative'
-                trendNumber='-18%'
+                trendNumber='issues'
                 subtitle='Last Week'
-                title='Sales Queries'
+                title='Total'
                 icon={<HelpCircleOutline />}
               />
             </Grid>
+
           </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>

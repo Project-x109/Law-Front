@@ -125,7 +125,6 @@ const DepositWithdraw = ({ csrfToken, isLoggedIn }) => {
     }
     dispatch(clearSuccessMessage())
   }, [error, successMessage]);
-  console.log(userPerformances)
   return (
     <Card sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: ['column', 'column', 'row'] }}>
       <ToastContainer />
@@ -140,7 +139,7 @@ const DepositWithdraw = ({ csrfToken, isLoggedIn }) => {
           }}
         />
         <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
-          {userPerformances.map((item, index) => {
+          {userPerformances?.slice(0, 5)?.map((item, index) => {
             return (
               <Box
                 key={item.title}
@@ -196,7 +195,7 @@ const DepositWithdraw = ({ csrfToken, isLoggedIn }) => {
 
       <Box sx={{ width: '100%' }}>
         <CardHeader
-          title='Withdraw'
+          title='Average Resolution Time'
           sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
           action={<Typography variant='caption'>View All</Typography>}
           titleTypographyProps={{
@@ -205,14 +204,25 @@ const DepositWithdraw = ({ csrfToken, isLoggedIn }) => {
           }}
         />
         <CardContent sx={{ pb: theme => `${theme.spacing(5.5)} !important` }}>
-          {withdrawData.map((item, index) => {
+        {userPerformances?.slice(6, 10)?.map((item, index) => {
             return (
               <Box
                 key={item.title}
-                sx={{ display: 'flex', alignItems: 'center', mb: index !== depositData.length - 1 ? 6 : 0 }}
+                sx={{ display: 'flex', alignItems: 'center', mb: index !== userPerformances.length - 1 ? 6 : 0 }}
               >
-                <Box sx={{ minWidth: 36, display: 'flex', justifyContent: 'center' }}>
-                  <img src={item.logo} alt={item.title} width={item.logoWidth} height={item.logoHeight} />
+                <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
+                  <Avatar
+                    sx={{
+                      width: 38,
+                      height: 38,
+                      marginRight: 3,
+                      fontSize: '1rem',
+                      color: 'common.white',
+                      backgroundColor: `${getRandomColor()}.main`
+                    }}
+                  >
+                    {item?.initials}
+                  </Avatar>
                 </Box>
                 <Box
                   sx={{
@@ -225,12 +235,20 @@ const DepositWithdraw = ({ csrfToken, isLoggedIn }) => {
                   }}
                 >
                   <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.title}</Typography>
-                    <Typography variant='caption'>{item.subtitle}</Typography>
+                    <Box sx={{ display: 'flex' }}>
+                      <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.firstName + " " + item.lastName}</Typography>
+
+                    </Box>
+                    <Typography variant='caption'>{"Number of Issues " + item.numberOfResolvedIssues}</Typography>
                   </Box>
-                  <Typography variant='subtitle2' sx={{ fontWeight: 600, color: 'error.main' }}>
-                    {item.amount}
-                  </Typography>
+                  <Box variant='subtitle2' sx={{ display: 'flex', textAlign: 'end', flexDirection: 'column' }}>
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', fontWeight: "600", color: "success.main", lineHeight: 1.72, letterSpacing: '0.22px' }}>
+                      {item?.averageResolutionTime + " Days"}
+                    </Typography>
+                    <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
+                      {"Resolution Time"}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
             )

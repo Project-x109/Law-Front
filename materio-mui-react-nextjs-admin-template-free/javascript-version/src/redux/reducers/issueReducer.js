@@ -23,7 +23,13 @@ import {
   GET_TOTAL_ISSUE_BY_USER_ERROR,
   GET_TOTAL_ISSUE_BY_USER_SUCCESS,
   GET_ALL_USER_PERFORMAANCE_ERROR,
-  GET_ALL_USER_PERFORMAANCE_SUCCESS
+  GET_ALL_USER_PERFORMAANCE_SUCCESS,
+  GET_WEEKELY_REVIEW_ERROR,
+  GET_WEEKELY_REVIEW_SUCCESS,
+  GET_ISSUE_LEVEL_COUNT_ERROR,
+  GET_ISSUE_LEVEL_COUNT_SUCCESS,
+  GET_DEPARTMENT_WISE_ANALYSIS_ERROR,
+  GET_DEPARTMENT_WISE_ANALYSIS_SUCCESS
 
 
 } from "../constants/issueConstant";
@@ -41,7 +47,10 @@ const initialState = {
   userSummery: null,
   adminSummery: null,
   totalIssueByUser: null,
-  userPerformance: null
+  userPerformance: null,
+  weeklyReview: null,
+  issueLevelCount: null,
+  departementAnalysis: null
 };
 
 const issueReducer = (state = initialState, action) => {
@@ -213,6 +222,45 @@ const issueReducer = (state = initialState, action) => {
         loading: null
       }
     case GET_ALL_USER_PERFORMAANCE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_WEEKELY_REVIEW_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        weeklyReview: action.payload.weeklyReview,
+        loading: null
+      }
+    case GET_WEEKELY_REVIEW_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_ISSUE_LEVEL_COUNT_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        issueLevelCount: action.payload.counts,
+        loading: null
+      }
+    case GET_ISSUE_LEVEL_COUNT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: null
+      }
+    case GET_DEPARTMENT_WISE_ANALYSIS_SUCCESS:
+      return {
+        ...state,
+        successMessage: action.payload,
+        departementAnalysis: action.payload.data,
+        loading: null
+      }
+    case GET_DEPARTMENT_WISE_ANALYSIS_ERROR:
       return {
         ...state,
         error: action.payload,

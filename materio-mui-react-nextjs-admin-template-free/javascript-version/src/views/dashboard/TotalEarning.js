@@ -12,86 +12,62 @@ import LinearProgress from '@mui/material/LinearProgress'
 import MenuUp from 'mdi-material-ui/MenuUp'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 
-const data = [
-  {
-    progress: 75,
-    imgHeight: 20,
-    title: 'Zipcar',
-    color: 'primary',
-    amount: '$24,895.65',
-    subtitle: 'Vuejs, React & HTML',
-    imgSrc: '/images/cards/logo-zipcar.png'
-  },
-  {
-    progress: 50,
-    color: 'info',
-    imgHeight: 27,
-    title: 'Bitbank',
-    amount: '$8,650.20',
-    subtitle: 'Sketch, Figma & XD',
-    imgSrc: '/images/cards/logo-bitbank.png'
-  },
-  {
-    progress: 20,
-    imgHeight: 20,
-    title: 'Aviato',
-    color: 'secondary',
-    amount: '$1,245.80',
-    subtitle: 'HTML & Angular',
-    imgSrc: '/images/cards/logo-aviato.png'
-  }
-]
 
-const TotalEarning = () => {
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getDepartmentWiseAnalysis } from 'src/redux/actions/issuections'
+import { clearSuccessMessage } from 'src/redux/actions/authActions'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getRandomColor } from 'src/@core/utils/otherUtils'
+const TotalEarning = ({ csrfToken, isLoggedIn }) => {
+  const { error, successMessage, departementAnalysis } = useSelector((state) => state.issue);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDepartmentWiseAnalysis(csrfToken, isLoggedIn))
+  }, [dispatch, csrfToken, isLoggedIn]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.error);
+    }
+    dispatch(clearSuccessMessage())
+  }, [error, successMessage]);
   return (
     <Card>
+      <ToastContainer />
       <CardHeader
-        title='Total Earning'
-        titleTypographyProps={{ sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' } }}
+        title='5 Issue Raising Department'
+        titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         action={
           <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
             <DotsVertical />
           </IconButton>
         }
       />
-      <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
-        <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
-          <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
-            $24,895
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', color: 'success.main' }}>
-            <MenuUp sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
-            <Typography variant='body2' sx={{ fontWeight: 600, color: 'success.main' }}>
-              10%
-            </Typography>
-          </Box>
-        </Box>
-
-        <Typography component='p' variant='caption' sx={{ mb: 10 }}>
-          Compared to $84,325 last year
-        </Typography>
-
-        {data.map((item, index) => {
+      <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
+        {departementAnalysis?.map((item, index) => {
           return (
             <Box
-              key={item.title}
+              key={item._id}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                ...(index !== data.length - 1 ? { mb: 8.5 } : {})
+                ...(index !== departementAnalysis.length - 1 ? { mb: 5.875 } : {})
               }}
             >
               <Avatar
-                variant='rounded'
                 sx={{
-                  mr: 3,
-                  width: 40,
-                  height: 40,
-                  backgroundColor: theme => `rgba(${theme.palette.customColors.main}, 0.04)`
+                  width: 38,
+                  height: 38,
+                  marginRight: 3,
+                  fontSize: '1rem',
+                  color: 'common.white',
+                  backgroundColor: `${getRandomColor()}.main`
                 }}
               >
-                <img src={item.imgSrc} alt={item.title} height={item.imgHeight} />
+                {'NA'}
               </Avatar>
+
               <Box
                 sx={{
                   width: '100%',
@@ -102,17 +78,21 @@ const TotalEarning = () => {
                 }}
               >
                 <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
-                    {item.title}
+
+
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.72, letterSpacing: '0.22px' }}>
+                    {item?._id.toUpperCase()}
+
                   </Typography>
-                  <Typography variant='caption'>{item.subtitle}</Typography>
+                  <Typography variant='caption' sx={{ lineHeight: 1.5 }}>
+                    {"Raising Department "}
+                  </Typography>
                 </Box>
 
-                <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
-                    {item.amount}
-                  </Typography>
-                  <LinearProgress color={item.color} value={item.progress} variant='determinate' />
+                <Box sx={{ display: 'flex', textAlign: 'end', flexDirection: 'column' }}>
+                  <Box sx={{ display: 'flex' }}>
+                    <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{item?.totalIssues + " Issues"}</Typography>
+                  </Box>
                 </Box>
               </Box>
             </Box>
