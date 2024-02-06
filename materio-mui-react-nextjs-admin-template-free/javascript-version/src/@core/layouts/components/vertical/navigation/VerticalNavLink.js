@@ -19,12 +19,7 @@ import UserIcon from 'src/layouts/components/UserIcon'
 
 // ** Utils
 import { handleURLQueries } from 'src/@core/layouts/utils'
-
-import { useEffect } from 'react'
 import { useSelector } from "react-redux";
-import { profile } from 'src/redux/actions/authActions'
-import { getCsrf } from 'src/redux/actions/authActions'
-import { useDispatch } from 'react-redux'
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',

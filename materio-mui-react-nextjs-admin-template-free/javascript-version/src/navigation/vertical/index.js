@@ -5,6 +5,7 @@ import { Account } from 'mdi-material-ui'
 import { AccountMultiple } from 'mdi-material-ui'
 import { CheckboxMarkedCircleMinusOutline } from 'mdi-material-ui'
 import { StarFourPointsCircleOutline } from 'mdi-material-ui'
+import withAuth from 'src/@core/utils/withAuth'
 const navigation = (userRole) => {
 
   const commonLinks = [

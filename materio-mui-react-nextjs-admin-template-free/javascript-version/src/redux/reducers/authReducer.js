@@ -35,10 +35,11 @@ const initialState = {
   successMessage: null,
   error: null,
   csrfToken: null,
-  loggedin: false,
   loading: false,
   userRole: null,
-  deactivatedusersLists: null
+  deactivatedusersLists: null,
+  isLoggedIn: false,
+  profiles: null
 
 };
 
@@ -56,7 +57,6 @@ const authReducer = (state = initialState, action) => {
     case CSRF_SUCCESS:
       return {
         ...state,
-        user: action.payload.username,
         successMessage: action.payload.success,
         error: null,
         csrfToken: action.payload.csrfToken,
@@ -65,7 +65,6 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_SUCCESS:
       return {
         ...state,
-        user: action.payload.user,
         successMessage: action.payload.message,
         error: null,
         loading: false
@@ -74,7 +73,6 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_ERROR:
       return {
         ...state,
-        user: null,
         successMessage: null,
         error: action.payload,
         loading: false
@@ -82,7 +80,6 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        user: action.payload.user,
         userRole: 'admin',
         successMessage: action.payload,
         error: null,
@@ -91,7 +88,6 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_EMPLOYEE_ERROR:
       return {
         ...state,
-        user: action.payload.user,
         userRole: 'admin',
         successMessage: null,
         error: action.payload,
@@ -105,14 +101,15 @@ const authReducer = (state = initialState, action) => {
         successMessage: null,
       };
     case LOGIN_SUCCESS:
+      console.log(state)
       return {
         ...state,
         user: action.payload.user,
         successMessage: action.payload.success,
         error: null,
-        loggedin: true,
         loading: false,
         csrfToken: action.payload.csrfToken,
+        isLoggedIn: true
       };
     case LOGIN_ERROR:
       return {
@@ -121,7 +118,6 @@ const authReducer = (state = initialState, action) => {
         successMessage: null,
         error: action.payload,
         csrfToken: null,
-        loggedin: false,
         loading: false,
       };
     case FORGOT_SUCCESS:
@@ -159,21 +155,26 @@ const authReducer = (state = initialState, action) => {
     case PROFILE_SUCCESS:
       return {
         ...state,
-        user: action.payload.user,
+        profiles: action.payload.user,
+        isLoggedIn: true,
         loading: false
       };
     case PROFILE_ERROR:
       return {
         ...state,
-        user: null,
         loading: false
       };
     case LOGOUT_SUCCESS:
       return {
         ...state,
-        user: null,
-        successMessage: action.payload.message,
-        error: null
+        usersLists: null,
+        successMessage: null,
+        error: null,
+        loading: false,
+        userRole: null,
+        deactivatedusersLists: null,
+        profiles: null,
+        isLoggedIn: false,
       };
     case LOGOUT_ERROR:
       return {

@@ -102,6 +102,7 @@ const WeeklyOverview = ({ csrfToken, isLoggedIn }) => {
       }
     }
   }
+  const closingPerformance = weeklyReview.closed ? (" " + (((weeklyReview?.closed / (weeklyReview?.closed + weeklyReview?.processing + weeklyReview?.pending))).toFixed(2) * 100) + "%") : " " + 0 + "%"
 
   return (
     <Card>
@@ -121,11 +122,11 @@ const WeeklyOverview = ({ csrfToken, isLoggedIn }) => {
         <ReactApexcharts type='bar' height={205} options={options} series={chartData?.series} />
         <Box sx={{ mb: 7, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h5' sx={{ mr: 4 }}>
-            {(((weeklyReview?.closed / (weeklyReview?.closed + weeklyReview?.processing + weeklyReview?.pending))).toFixed(2) * 100) + "%"}
+            {closingPerformance}
           </Typography>
 
           <Typography variant='body2'>Your issue closing performance is
-            {" " + (((weeklyReview?.closed / (weeklyReview?.closed + weeklyReview?.processing + weeklyReview?.pending))).toFixed(2) * 100) + "%"}
+            {closingPerformance}
           </Typography>
         </Box>
         <Button fullWidth variant='contained'>

@@ -20,11 +20,10 @@ import { useSelector } from "react-redux";
 import { profile } from 'src/redux/actions/authActions'
 import { getCsrf } from 'src/redux/actions/authActions'
 import { useDispatch } from 'react-redux'
-import { debounce } from 'lodash';
 
 const UserLayout = ({ children }) => {
   // ** Hooks
-  const { user, csrfToken, userRole } = useSelector((state) => state.auth)
+  const { profiles, csrfToken, userRole } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const { settings, saveSettings } = useSettings()
@@ -42,12 +41,12 @@ const UserLayout = ({ children }) => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()]);
+  }, [dispatch, getCsrf]);
   useEffect(() => {
     if (csrfToken && isLoggedIn) {
       dispatch(profile(csrfToken, isLoggedIn));
     }
-  }, [dispatch, csrfToken, isLoggedIn]);
+  }, [dispatch, csrfToken, isLoggedIn, profile]);
 
 
 
@@ -70,8 +69,8 @@ const UserLayout = ({ children }) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems(user ? user?.role : userRole)} // Navigation Items
-      afterVerticalNavMenuContent={UpgradeToProImg}
+      verticalNavItems={VerticalNavItems(profiles ? profiles?.role : userRole)} // Navigation Items
+      //afterVerticalNavMenuContent={UpgradeToProImg}
       verticalAppBarContent={(
         props // AppBar Content
       ) => (

@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Chip } from '@mui/material';
 import { getStatusColor, getLevelColor } from 'src/@core/utils/otherUtils';
 import { OpenInNew } from 'mdi-material-ui';
+import withAuth from 'src/@core/utils/withAuth'
 const UserLists = () => {
   const { error, issues } = useSelector((state) => state.issue)
   const { csrfToken } = useSelector((state) => state.auth)
@@ -141,4 +142,4 @@ const UserLists = () => {
   )
 }
 
-export default UserLists
+export default withAuth(UserLists, ['admin', 'employee'])

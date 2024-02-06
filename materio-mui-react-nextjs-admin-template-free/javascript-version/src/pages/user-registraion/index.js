@@ -33,6 +33,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { validateForm } from 'src/@core/utils/validation'
 import Loader from 'src/@core/utils/loader'
 import { clearSuccessMessage } from 'src/redux/actions/authActions'
+import withAuth from 'src/@core/utils/withAuth'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
@@ -261,4 +262,4 @@ const FormLayoutsSeparator = () => {
   )
 }
 
-export default FormLayoutsSeparator
+export default withAuth(FormLayoutsSeparator, ['admin'])

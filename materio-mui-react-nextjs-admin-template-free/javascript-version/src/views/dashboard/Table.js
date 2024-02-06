@@ -102,10 +102,10 @@ const statusObj = {
 
 const DashboardTable = ({ csrfToken, isLoggedIn }) => {
   const { error, activities, loading, successMessage, activity } = useSelector((state) => state.issue);
-  const { user, userRole } = useSelector((state) => state.auth)
+  const { profiles, userRole } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user?.role === "admin" || userRole === "admin") {
+    if (profiles?.role === "admin" || userRole === "admin") {
       dispatch(getRecentActivities(csrfToken, isLoggedIn));
     } else {
       dispatch(getRecentActivity(csrfToken, isLoggedIn))
@@ -135,7 +135,7 @@ const DashboardTable = ({ csrfToken, isLoggedIn }) => {
             </TableRow>
           </TableHead>
           {
-            user?.role === 'admin' ?
+            profiles?.role === 'admin' ?
               <TableBody>
                 {activities?.map(row => (
                   <TableRow hover key={row.issueId} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>

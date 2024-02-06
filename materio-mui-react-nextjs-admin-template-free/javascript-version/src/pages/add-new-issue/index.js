@@ -19,6 +19,7 @@ import Swal from 'sweetalert2'
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import withAuth from 'src/@core/utils/withAuth'
 
 // ** Icons Imports
 import Select from '@mui/material/Select'
@@ -74,7 +75,7 @@ const FormLayoutsSeparator = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch,getCsrf()]);
+  }, [dispatch, getCsrf()]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -321,4 +322,4 @@ const FormLayoutsSeparator = () => {
   )
 }
 
-export default FormLayoutsSeparator
+export default withAuth(FormLayoutsSeparator, ['admin', 'employee'])

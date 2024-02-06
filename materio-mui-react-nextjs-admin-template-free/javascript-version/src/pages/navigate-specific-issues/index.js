@@ -16,6 +16,7 @@ import { getStatusColor, StatusRadioIssue, getLevelColor } from 'src/@core/utils
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
+import withAuth from 'src/@core/utils/withAuth'
 const UserLists = () => {
   const { error, userSpecificIssue, successMessage, loading } = useSelector((state) => state.issue)
   const { csrfToken } = useSelector((state) => state.auth)
@@ -37,7 +38,7 @@ const UserLists = () => {
       toast.error(error?.error)
     }
     dispatch(clearSuccessMessage())
-  }, [error,successMessage]);
+  }, [error, successMessage]);
   const issue = Array.isArray(userSpecificIssue)
     ? userSpecificIssue.reverse().map((item) => ({
       id: item?._id || null,
@@ -218,4 +219,4 @@ const UserLists = () => {
   )
 }
 
-export default UserLists
+export default withAuth(UserLists, ['admin', 'employee'])

@@ -18,6 +18,7 @@ import IssueInfo from 'src/views/issue-details/IssueInfo'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import withAuth from 'src/@core/utils/withAuth'
 
 
 const Tab = styled(MuiTab)(({ theme }) => ({
@@ -97,4 +98,4 @@ const IssueDetails = () => {
   )
 }
 
-export default IssueDetails
+export default withAuth(IssueDetails, ['admin','employee'])

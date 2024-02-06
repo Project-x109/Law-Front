@@ -13,6 +13,7 @@ import Magnify from 'mdi-material-ui/Magnify'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import withAuth from 'src/@core/utils/withAuth'
 
 const AppBarContent = props => {
   // ** Props
@@ -46,7 +47,7 @@ const AppBarContent = props => {
         />
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-        {hiddenSm ? null : (
+        {/*  {hiddenSm ? null : (
           <Box
             component='a'
             target='_blank'
@@ -60,7 +61,7 @@ const AppBarContent = props => {
               src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
             />
           </Box>
-        )}
+        )} */}
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <NotificationDropdown />
         <UserDropdown />
@@ -69,4 +70,4 @@ const AppBarContent = props => {
   )
 }
 
-export default AppBarContent
+export default withAuth(AppBarContent, ['admin', 'employee'])

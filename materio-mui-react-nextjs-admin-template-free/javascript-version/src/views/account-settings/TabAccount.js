@@ -17,7 +17,9 @@ import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
-
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
 
@@ -47,7 +49,6 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
 
 const TabAccount = () => {
   // ** State
-  const [openAlert, setOpenAlert] = useState(true)
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
 
   const onChange = file => {
@@ -58,12 +59,14 @@ const TabAccount = () => {
       reader.readAsDataURL(files[0])
     }
   }
+  const { profiles, user } = useSelector((state) => state.auth);
+  console.log(user)
 
   return (
     <CardContent>
       <form>
         <Grid container spacing={7}>
-          <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+          {/*    <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <ImgStyled src={imgSrc} alt='Profile Pic' />
               <Box>
@@ -85,76 +88,58 @@ const TabAccount = () => {
                 </Typography>
               </Box>
             </Box>
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Username' placeholder='johnDoe' defaultValue='johnDoe' />
+            <TextField fullWidth label='Username' placeholder='johnDoe' value={user?.username} disabled defaultValue='johnDoe' />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Name' placeholder='John Doe' defaultValue='John Doe' />
+            <TextField fullWidth label='firstName' placeholder='John Doe' value={user?.firstName} disabled defaultValue='John Doe' />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              type='email'
-              label='Email'
-              placeholder='johnDoe@example.com'
-              defaultValue='johnDoe@example.com'
+              type='text'
+              label='lastName'
+              placeholder='johnDoe'
+              defaultValue='johnDoe'
+              value={user?.lastName}
+              disabled
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='admin'>
-                <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='author'>Author</MenuItem>
-                <MenuItem value='editor'>Editor</MenuItem>
-                <MenuItem value='maintainer'>Maintainer</MenuItem>
-                <MenuItem value='subscriber'>Subscriber</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              type='text'
+              label='role'
+              placeholder='admin'
+              defaultValue='admin'
+              value={user?.role}
+              disabled
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Status</InputLabel>
-              <Select label='Status' defaultValue='active'>
-                <MenuItem value='active'>Active</MenuItem>
-                <MenuItem value='inactive'>Inactive</MenuItem>
-                <MenuItem value='pending'>Pending</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              type='text'
+              label='status'
+              placeholder='pending'
+              defaultValue='pending'
+              value={user?.status}
+              disabled
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
+            <TextField fullWidth label='Phone Number' type='tel' value={user?.phoneNumber} disabled placeholder='0919485189' defaultValue='0919485189'/>
           </Grid>
-
-          {openAlert ? (
-            <Grid item xs={12} sx={{ mb: 3 }}>
-              <Alert
-                severity='warning'
-                sx={{ '& a': { fontWeight: 400 } }}
-                action={
-                  <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
-                    <Close fontSize='inherit' />
-                  </IconButton>
-                }
-              >
-                <AlertTitle>Your email is not confirmed. Please check your inbox.</AlertTitle>
-                <Link href='/' onClick={e => e.preventDefault()}>
-                  Resend Confirmation
-                </Link>
-              </Alert>
-            </Grid>
-          ) : null}
-
-          <Grid item xs={12}>
+         {/*  <Grid item xs={12}>
             <Button variant='contained' sx={{ marginRight: 3.5 }}>
               Save Changes
             </Button>
             <Button type='reset' variant='outlined' color='secondary'>
               Reset
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
       </form>
     </CardContent>

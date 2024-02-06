@@ -146,7 +146,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_RECENT_ACTIVITIES_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         activities: action.payload.recentActivities,
         loading: null
       }
@@ -159,7 +159,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_USER_SPECIFIC_RECENT_ACTIVITY_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         activity: action.payload.recentActivities,
         loading: null
       }
@@ -172,7 +172,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_USER_DASHBOARD_SUMMERY_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         userSummery: action.payload.summary,
         loading: null
       }
@@ -185,7 +185,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_ADMIN_DASHBOARD_SUMMERY_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         adminSummery: action.payload.summary,
         loading: null
       }
@@ -204,7 +204,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_TOTAL_ISSUE_BY_USER_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         totalIssueByUser: action.payload.data,
         loading: null
       }
@@ -217,9 +217,9 @@ const issueReducer = (state = initialState, action) => {
     case GET_ALL_USER_PERFORMAANCE_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         userPerformances: action.payload.topUserPerformances,
-        loading: null
+        loading: null,
       }
     case GET_ALL_USER_PERFORMAANCE_ERROR:
       return {
@@ -230,7 +230,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_WEEKELY_REVIEW_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         weeklyReview: action.payload.weeklyReview,
         loading: null
       }
@@ -243,7 +243,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_ISSUE_LEVEL_COUNT_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         issueLevelCount: action.payload.counts,
         loading: null
       }
@@ -256,7 +256,7 @@ const issueReducer = (state = initialState, action) => {
     case GET_DEPARTMENT_WISE_ANALYSIS_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload,
+        successMessage: null,
         departementAnalysis: action.payload.data,
         loading: null
       }

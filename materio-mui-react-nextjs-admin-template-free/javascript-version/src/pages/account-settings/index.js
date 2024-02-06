@@ -22,6 +22,7 @@ import TabSecurity from 'src/views/account-settings/TabSecurity'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import withAuth from 'src/@core/utils/withAuth'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -75,7 +76,7 @@ const AccountSettings = () => {
               </Box>
             }
           />
-          <Tab
+          {/* <Tab
             value='info'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -83,7 +84,7 @@ const AccountSettings = () => {
                 <TabName>Info</TabName>
               </Box>
             }
-          />
+          /> */}
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value='account'>
@@ -93,11 +94,11 @@ const AccountSettings = () => {
           <TabSecurity />
         </TabPanel>
         <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
+          {/* <TabInfo /> */}
         </TabPanel>
       </TabContext>
     </Card>
   )
 }
 
-export default AccountSettings
+export default withAuth(AccountSettings,['admin','employee'])

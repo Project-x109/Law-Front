@@ -132,9 +132,7 @@ const LoginPage = () => {
       return;
     }
     try {
-
       dispatch(login(loginData, csrfToken));
-
     } catch (error) {
       Swal.fire({
         icon: "error",

@@ -27,6 +27,7 @@ import { getIssueLevelCounts } from 'src/redux/actions/issuections'
 import { useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import withAuth from 'src/@core/utils/withAuth'
 
 const Dashboard = () => {
   const { csrfToken } = useSelector((state) => state.auth);
@@ -125,4 +126,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuth(Dashboard, ['admin'])

@@ -22,17 +22,17 @@ const statusObj = {
   other: { color: 'success', icon: <Handshake sx={{ fontSize: '1.75rem' }} />, label: "Closed" }
 }
 const StatisticsCard = ({ csrfToken, isLoggedIn }) => {
-  const { error, adminSummery, loading, successMessage, userSummery } = useSelector((state) => state.issue);
-  const { user, userRole } = useSelector((state) => state.auth)
+  const { error, adminSummery, successMessage, userSummery } = useSelector((state) => state.issue);
+  const { profiles, userRole } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user?.role === "admin" || userRole === "admin") {
+    if (profiles?.role === "admin" || userRole === "admin") {
       dispatch(getDashboardSummary(csrfToken, isLoggedIn));
     } else {
       dispatch(getUserDashboardSummary(csrfToken, isLoggedIn))
     }
 
-  }, [dispatch, csrfToken, isLoggedIn, user?.role]);
+  }, [dispatch, csrfToken, isLoggedIn, profiles?.role]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error);
@@ -40,7 +40,7 @@ const StatisticsCard = ({ csrfToken, isLoggedIn }) => {
     dispatch(clearSuccessMessage())
   }, [error, successMessage]);
   const renderStats = () => {
-    if (user?.role === "employee" || userRole === "employee") {
+    if (profiles?.role === "employee" || userRole === "employee") {
       if (!userSummery || !userSummery.issuesByStatus) {
         return null;
       }
@@ -114,7 +114,7 @@ const StatisticsCard = ({ csrfToken, isLoggedIn }) => {
             <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
               Average Resolution Time
             </Box>{' '}
-            {user?.role === "admin" ? adminSummery?.averageResolutionTime : userSummery?.averageResolutionTime}
+            {profiles?.role === "admin" ? adminSummery?.averageResolutionTime : userSummery?.averageResolutionTime}
           </Typography>
         }
         titleTypographyProps={{
@@ -146,7 +146,7 @@ const StatisticsCard = ({ csrfToken, isLoggedIn }) => {
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='caption'>{"TOTAL"}</Typography>
                 {
-                  user?.role === "admin" ?
+                  profiles?.role === "admin" ?
                     <Typography variant='h6'>{adminSummery?.totalIssues + " Issue"}</Typography> :
                     <Typography variant='h6'>{userSummery?.totalIssues + " Issue"}</Typography>
                 }

@@ -12,6 +12,8 @@ import { clearSuccessMessage } from 'src/redux/actions/authActions';
 import Loader from 'src/@core/utils/loader';
 import { getUserStatusColor } from 'src/@core/utils/otherUtils';
 import { Chip } from '@mui/material';
+import withAuth from 'src/@core/utils/withAuth'
+
 const UserLists = () => {
   const { csrfToken, error, usersLists, loading } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
@@ -81,7 +83,7 @@ const UserLists = () => {
 
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Dense Table' titleTypographyProps={{ variant: 'h6' }} />
+            <CardHeader title='Lists of Users' titleTypographyProps={{ variant: 'h6' }} />
             <DataGrid
               {...data}
               components={{
@@ -105,4 +107,4 @@ const UserLists = () => {
   )
 }
 
-export default UserLists
+export default withAuth(UserLists,['admin'])

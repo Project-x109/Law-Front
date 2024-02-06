@@ -10,12 +10,14 @@ import { allDeactivatedUsers, getCsrf, updateStatus } from 'src/redux/actions/au
 import { ToastContainer, toast } from 'react-toastify';
 import { clearSuccessMessage } from 'src/redux/actions/authActions';
 import Loader from 'src/@core/utils/loader';
-import { getUserStatusColor,StatusRadio } from 'src/@core/utils/otherUtils';
+import { getUserStatusColor, StatusRadio } from 'src/@core/utils/otherUtils';
 import { Chip } from '@mui/material';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { OpenInNew } from 'mdi-material-ui';
 import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css';
+import withAuth from 'src/@core/utils/withAuth'
+
 const DeacivatedUserLists = () => {
   const { csrfToken, error, deactivatedusersLists, loading, successMessage } = useSelector((state) => state.auth);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
@@ -183,4 +185,4 @@ const DeacivatedUserLists = () => {
   );
 };
 
-export default DeacivatedUserLists;
+export default withAuth(DeacivatedUserLists, ['admin']);
