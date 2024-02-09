@@ -19,6 +19,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import Swal from 'sweetalert2'
+
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -84,6 +85,7 @@ const FormLayoutsSeparator = () => {
       Object.values(errors).forEach((errorMessage) => {
         toast.error(errorMessage);
       });
+
       return;
     }
     try {
@@ -98,10 +100,11 @@ const FormLayoutsSeparator = () => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "User Register Successfully",
@@ -122,7 +125,7 @@ const FormLayoutsSeparator = () => {
       })
       dispatch(clearSuccessMessage())
     }
-  }, [error, successMessage,dispatch]);
+  }, [error, successMessage, dispatch]);
 
   const handlePasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })

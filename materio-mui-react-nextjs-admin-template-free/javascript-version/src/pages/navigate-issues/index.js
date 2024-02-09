@@ -13,16 +13,23 @@ import { Chip } from '@mui/material';
 import { getStatusColor, getLevelColor } from 'src/@core/utils/otherUtils';
 import { OpenInNew } from 'mdi-material-ui';
 import withAuth from 'src/@core/utils/withAuth'
+
 const UserLists = () => {
+
   const { error, issues } = useSelector((state) => state.issue)
+
   const { csrfToken } = useSelector((state) => state.auth)
+
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     if (!csrfToken) {
       dispatch(getCsrf())
     }
+
     dispatch(getAllIssues(csrfToken, isLoggedIn))
   }, [dispatch, csrfToken, isLoggedIn]);
 

@@ -86,12 +86,15 @@ const FormLayoutsSeparator = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateFormIssus(formValues);
+
     if (Object.keys(errors).length > 0) {
       Object.values(errors).forEach((errorMessage) => {
         toast.error(errorMessage);
       });
+
       return;
     }
+
     try {
       dispatch(registerNewIssues(formValues, csrfToken, isLoggedIn))
     } catch (error) {
@@ -102,18 +105,22 @@ const FormLayoutsSeparator = () => {
 
 
   useEffect(() => {
+
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }
+
     if (successMessage?.message && !loading) {
       Swal.fire({
         icon: "success",
         title: "Registerd Successfully",
         text: successMessage.message,
       });
+
       setFormValues({
         issueType: '',
         issueRegion: '',
@@ -130,6 +137,7 @@ const FormLayoutsSeparator = () => {
         issueDecisionDate: null
       });
     }
+
   }, [error, successMessage]);
 
   return (

@@ -64,6 +64,7 @@ const ForgetPasswordPage = () => {
   const [values, setValues] = useState({
     username: '',
   })
+
   // ** Hook
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -95,6 +96,7 @@ const ForgetPasswordPage = () => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }

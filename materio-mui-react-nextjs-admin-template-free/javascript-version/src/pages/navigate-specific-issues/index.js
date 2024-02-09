@@ -14,10 +14,13 @@ import { Chip } from '@mui/material';
 import { OpenInNew } from 'mdi-material-ui';
 import { getStatusColor, StatusRadioIssue, getLevelColor } from 'src/@core/utils/otherUtils';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
 import withAuth from 'src/@core/utils/withAuth'
+
+import 'react-toastify/dist/ReactToastify.css';
+
 const UserLists = () => {
+
   const { error, userSpecificIssue, successMessage, loading } = useSelector((state) => state.issue)
   const { csrfToken } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
@@ -162,6 +165,7 @@ const UserLists = () => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }

@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from 'src/@core/utils/withAuth'
 
 const DeacivatedUserLists = () => {
+
   const { csrfToken, error, deactivatedusersLists, loading, successMessage } = useSelector((state) => state.auth);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
@@ -118,13 +119,16 @@ const DeacivatedUserLists = () => {
   };
 
   useEffect(() => {
+
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "User Unblocked Successfully",

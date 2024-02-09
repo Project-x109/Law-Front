@@ -45,6 +45,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getCsrf, login } from "src/redux/actions/authActions";
 import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -67,9 +68,12 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const LoginPage = () => {
+
   const { error, csrfToken, successMessage, user } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+
   console.log(csrfToken)
+
   // ** State
   const [values, setValues] = useState({
     password: '',
@@ -91,7 +95,9 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
   const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -127,13 +133,16 @@ const LoginPage = () => {
   }, [successMessage, dispatch, isLoggedIn, user?.role, user?.status, router]);
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
     const loginData = {
       username,
       password,
     };
     if (!username || !password) {
       toast.error("Please fill in both fields.")
+
       return;
     }
     try {
@@ -153,6 +162,7 @@ const LoginPage = () => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }

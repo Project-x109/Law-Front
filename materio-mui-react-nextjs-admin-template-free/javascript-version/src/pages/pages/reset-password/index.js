@@ -120,14 +120,17 @@ const ResetPasswordPage = () => {
     e.preventDefault();
     if (!values.password || !values.confirmPassword) {
       toast.error("Password is Required");
+
       return;
     }
     if (values.password.length < 8) {
       toast.warning("Password should be Eight digits or above");
+
       return;
     }
     if (values.confirmPassword !== values.password) {
       toast.error("Confirm password and Password should match");
+
       return;
     }
 
@@ -142,6 +145,7 @@ const ResetPasswordPage = () => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
         toast.error(singleError);
+
         return null;
       });
     }
