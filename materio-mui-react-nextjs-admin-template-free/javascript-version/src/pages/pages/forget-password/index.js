@@ -101,7 +101,7 @@ const ForgetPasswordPage = () => {
         return null;
       });
     }
-    if (successMessage?.success && !loading) {
+    if (successMessage?.success) {
       Swal.fire({
         icon: "success",
         title: "Token Sent Successfully",

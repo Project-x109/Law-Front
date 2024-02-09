@@ -135,7 +135,7 @@ const TabIssue = () => {
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "Updated Successfully",

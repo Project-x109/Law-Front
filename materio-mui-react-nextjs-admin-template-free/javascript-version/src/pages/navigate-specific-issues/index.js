@@ -169,7 +169,7 @@ const UserLists = () => {
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "Issue Status Changed Successfully",

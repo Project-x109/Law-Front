@@ -128,7 +128,7 @@ const TabSecurity = () => {
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "Password Changed Successfully",
@@ -136,7 +136,7 @@ const TabSecurity = () => {
       });
     }
     dispatch(clearSuccessMessage())
-  }, [error, successMessage, loading, dispatch]);
+  }, [error, successMessage, dispatch]);
   return (
     <form onSubmit={handleSubmit}>
       <ToastContainer />

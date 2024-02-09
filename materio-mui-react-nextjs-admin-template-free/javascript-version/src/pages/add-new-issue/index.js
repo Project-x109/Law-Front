@@ -114,7 +114,7 @@ const FormLayoutsSeparator = () => {
       });
     }
 
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "Registerd Successfully",

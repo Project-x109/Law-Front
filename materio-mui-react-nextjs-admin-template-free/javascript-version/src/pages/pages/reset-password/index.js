@@ -91,10 +91,10 @@ const ResetPasswordPage = () => {
   }, [router.query]);
 
   useEffect(() => {
-    if(!csrfToken){
+    if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf(),csrfToken])
+  }, [dispatch, getCsrf(), csrfToken])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -149,7 +149,7 @@ const ResetPasswordPage = () => {
         return null;
       });
     }
-    if (successMessage?.success && !loading) {
+    if (successMessage?.success) {
       Swal.fire({
         icon: "success",
         title: "Password Changed Successfully",

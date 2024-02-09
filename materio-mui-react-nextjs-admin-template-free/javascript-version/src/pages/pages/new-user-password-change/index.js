@@ -149,7 +149,7 @@ const NewUserResetPasswordPage = () => {
         return null;
       });
     }
-    if (successMessage?.message && !loading) {
+    if (successMessage?.message) {
       Swal.fire({
         icon: "success",
         title: "Password Changed Successfully",
