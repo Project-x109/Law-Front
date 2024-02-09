@@ -83,6 +83,7 @@ const ForgetPasswordPage = () => {
     e.preventDefault();
     if (!values.username) {
       toast.error("Email is Required");
+
       return;
     }
     try {

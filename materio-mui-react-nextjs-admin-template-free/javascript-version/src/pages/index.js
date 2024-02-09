@@ -303,7 +303,6 @@ const LoginPage = () => {
               type="submit"
               variant='contained'
               sx={{ marginBottom: 7 }}
-            /* onClick={() => router.push('/')}*/
             >
               Login
             </Button>
