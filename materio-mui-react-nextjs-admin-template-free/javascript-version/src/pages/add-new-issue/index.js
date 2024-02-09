@@ -60,6 +60,7 @@ const FormLayoutsSeparator = () => {
     issueDecisionDate: null
 
   });
+
   const handleChange = (field) => (e) => {
     setFormValues({ ...formValues, [field]: e.target.value });
   };
@@ -80,7 +81,7 @@ const FormLayoutsSeparator = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()]);
+  }, [dispatch, getCsrf(), csrfToken]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -43,6 +43,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
+
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -80,6 +81,7 @@ const NewUserResetPasswordPage = () => {
   const { error, successMessage, loading, csrfToken } = useSelector(state => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const mainValues = { password: values.password, confirmPassword: values.confirmPassword, token: values.resetToken }
+
   useEffect(() => {
     // Access the token from the query parameters
     const { token } = router.query;
@@ -87,11 +89,12 @@ const NewUserResetPasswordPage = () => {
       setValues({ ...values, resetToken: token });
     }
   }, [router.query]);
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()])
+  }, [dispatch, getCsrf(), csrfToken])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -100,6 +103,7 @@ const NewUserResetPasswordPage = () => {
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }
+
   const handleClickConfirmPassword = () => {
     setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
   }
@@ -107,9 +111,11 @@ const NewUserResetPasswordPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
   const handleMouseDownConfirmePassword = event => {
     event.preventDefault()
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!values.password || !values.confirmPassword) {
@@ -131,6 +137,7 @@ const NewUserResetPasswordPage = () => {
       toast.error('An error occurred during form submission.');
     }
   }
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {

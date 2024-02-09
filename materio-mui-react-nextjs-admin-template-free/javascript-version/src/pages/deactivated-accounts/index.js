@@ -23,10 +23,12 @@ const DeacivatedUserLists = () => {
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
+
   const [all, setAll] = useState({
     id: null,
     status: ''
   });
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf());
@@ -40,7 +42,7 @@ const DeacivatedUserLists = () => {
     }
 
     dispatch(clearSuccessMessage())
-  }, [error]);
+  }, [error, dispatch]);
 
   const userLists = deactivatedusersLists?.map((item) => ({
     id: item?._id,
@@ -84,18 +86,23 @@ const DeacivatedUserLists = () => {
           />
         </div>
       )
+
     }
   ];
+
   const data = {
     rows: userLists || [],
     columns
   };
+
   const handleChange = (field) => (value) => {
     setAll({ ...all, [field]: value });
   };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -104,6 +111,7 @@ const DeacivatedUserLists = () => {
     setAll({ status: currentStatus, id: id });
     handleOpenModal();
   };
+
   const handleUpdateStatus = () => {
     dispatch(updateStatus(all, csrfToken, isLoggedIn));
     handleCloseModal();
@@ -128,7 +136,7 @@ const DeacivatedUserLists = () => {
       })
       dispatch(clearSuccessMessage())
     }
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
 
   return (
     <>

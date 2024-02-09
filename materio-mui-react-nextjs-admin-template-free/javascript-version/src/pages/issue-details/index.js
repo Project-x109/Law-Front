@@ -12,6 +12,7 @@ import MuiTab from '@mui/material/Tab'
 
 // ** Icons Imports
 import { Comment, Information, Details } from 'mdi-material-ui'
+
 // ** Demo Tabs Imports
 import TabIssue from 'src/views/issue-details/TabIssue'
 import IssueInfo from 'src/views/issue-details/IssueInfo'

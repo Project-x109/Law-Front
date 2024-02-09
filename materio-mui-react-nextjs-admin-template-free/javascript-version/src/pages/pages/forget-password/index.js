@@ -38,6 +38,7 @@ import Loader from 'src/@core/utils/loader'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify'
 import Swal from 'sweetalert2'
+
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -76,6 +77,7 @@ const ForgetPasswordPage = () => {
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!values.username) {
@@ -88,6 +90,7 @@ const ForgetPasswordPage = () => {
       toast.error('An error occurred during form submission.');
     }
   }
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
@@ -103,6 +106,7 @@ const ForgetPasswordPage = () => {
       });
     }
   }, [error, successMessage]);
+
   return (
     <>
       <Box className='content-center'>

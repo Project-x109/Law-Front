@@ -43,13 +43,16 @@ const FormLayoutsSeparator = () => {
   // ** States
   const { csrfToken, error, loading, successMessage } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+
   const dispatch = useDispatch();
+
   const [values, setValues] = useState({
     password: '',
     ConfirmPassword: '',
     showPassword: false,
     showPassword2: false
   })
+
   const [formValues, setFormValues] = useState({
     username: '',
     password: '',
@@ -67,6 +70,7 @@ const FormLayoutsSeparator = () => {
   const handleDateChange = (date) => {
     setFormValues({ ...formValues, dateOfBirth: date });
   };
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
@@ -89,6 +93,7 @@ const FormLayoutsSeparator = () => {
     }
 
   };
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
@@ -117,7 +122,8 @@ const FormLayoutsSeparator = () => {
       })
       dispatch(clearSuccessMessage())
     }
-  }, [error, successMessage]);
+  }, [error, successMessage,dispatch]);
+
   const handlePasswordChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
     handleChange(prop)(event);
@@ -144,9 +150,6 @@ const FormLayoutsSeparator = () => {
   const handleMouseDownConfirmPassword = event => {
     event.preventDefault()
   }
-
-
-
 
   return (
     <Card>

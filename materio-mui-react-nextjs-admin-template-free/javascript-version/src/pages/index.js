@@ -69,7 +69,7 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   const { error, csrfToken, successMessage, user } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
-
+  console.log(csrfToken)
   // ** State
   const [values, setValues] = useState({
     password: '',
@@ -96,15 +96,19 @@ const LoginPage = () => {
     username: "",
     password: "",
   });
+
   const { username, password } = formData;
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf()])
+  }, [dispatch, getCsrf(), csrfToken])
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   useEffect(() => {
     if (successMessage) {
       if (user?.role === "employee" && user?.status === "active") {
@@ -120,7 +124,8 @@ const LoginPage = () => {
         router.push("/")
       }
     }
-  }, [successMessage, dispatch, isLoggedIn]);
+  }, [successMessage, dispatch, isLoggedIn, user?.role, user?.status, router]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const loginData = {
@@ -143,6 +148,7 @@ const LoginPage = () => {
       });
     }
   }
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {

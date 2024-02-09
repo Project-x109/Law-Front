@@ -18,17 +18,20 @@ const UserLists = () => {
   const { csrfToken } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
     dispatch(getAllIssues(csrfToken, isLoggedIn))
   }, [dispatch, csrfToken, isLoggedIn]);
+
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
   }, [error]);
+
   const issue = issues?.reverse()?.map((item) => ({
     id: item?._id,
     requestingDepartment: item?.requestingDepartment?.toUpperCase(),
@@ -44,6 +47,7 @@ const UserLists = () => {
     status: item?.status?.toUpperCase(),
     createdBy: (item?.createdBy?.firstName)?.toUpperCase(),
   }))
+
   const columns = [
     { field: 'requestingDepartment', headerName: 'Department', flex: 100 },
     { field: 'issuedDate', headerName: 'Issued Date', flex: 100 },
@@ -95,14 +99,17 @@ const UserLists = () => {
       />,
     },
   ];
+
   const data = {
     rows: issue || [],
     columns,
   };
+
   const handleOpenInNew = (id) => {
     const url = `/issue-details?id=${id}`;
     window.open(url, '_blank');
   };
+
   return (
     <>
       <ToastContainer />

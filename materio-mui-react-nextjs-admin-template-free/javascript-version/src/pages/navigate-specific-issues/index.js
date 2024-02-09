@@ -23,22 +23,26 @@ const UserLists = () => {
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
+
   const [all, setAll] = useState({
     id: null,
     status: ''
   });
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
     dispatch(getUserBasedIssues(csrfToken, isLoggedIn))
-  }, [dispatch]);
+  }, [dispatch, csrfToken, isLoggedIn]);
+
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
     dispatch(clearSuccessMessage())
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
+
   const issue = Array.isArray(userSpecificIssue)
     ? userSpecificIssue.reverse().map((item) => ({
       id: item?._id || null,
@@ -120,32 +124,40 @@ const UserLists = () => {
       )
     }
   ];
+
   const data = {
     rows: issue || [],
     columns,
   };
+
   const handleOpenInNew = (id) => {
     const url = `/issue-details?id=${id}`;
     window.open(url, '_blank');
   };
+
   const handleChange = (field) => (value) => {
     setAll({ ...all, [field]: value });
   };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+
 
   const handleStatusChange = (id, currentStatus) => {
     setAll({ status: currentStatus, id: id });
     handleOpenModal();
   };
+
   const handleUpdateStatus = () => {
     dispatch(updateStatus(all, csrfToken, isLoggedIn));
     handleCloseModal();
   };
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
@@ -165,7 +177,8 @@ const UserLists = () => {
       })
       dispatch(clearSuccessMessage())
     }
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
+
   return (
     <>
       <ToastContainer />

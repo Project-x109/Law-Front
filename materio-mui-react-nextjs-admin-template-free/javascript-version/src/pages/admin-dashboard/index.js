@@ -45,7 +45,8 @@ const Dashboard = () => {
       toast.error(error?.error);
     }
     dispatch(clearSuccessMessage())
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
+
   return (
     <>
 

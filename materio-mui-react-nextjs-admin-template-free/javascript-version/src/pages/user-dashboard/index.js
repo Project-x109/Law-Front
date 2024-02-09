@@ -32,19 +32,23 @@ const Dashboard = () => {
   const { csrfToken } = useSelector((state) => state.issue);
   const { issueLevelCount, error, successMessage } = useSelector((state) => state.issue);
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+
   const dispatch = useDispatch()
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf());
     }
     dispatch(getIssueLevelCounts(csrfToken, isLoggedIn))
   }, [dispatch, csrfToken, isLoggedIn]);
+
   useEffect(() => {
     if (error) {
       toast.error(error?.error);
     }
     dispatch(clearSuccessMessage())
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
+
   return (
     <ApexChartWrapper>
       <ToastContainer />

@@ -18,18 +18,20 @@ const UserLists = () => {
   const { csrfToken, error, usersLists, loading } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
     dispatch(allUsers(csrfToken, isLoggedIn))
   }, [dispatch, csrfToken, isLoggedIn]);
+
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
     dispatch(clearSuccessMessage())
-  }, [error]);
+  }, [error,dispatch]);
 
   const userLists = usersLists?.map((item) => ({
     id: item?._id,
@@ -40,6 +42,7 @@ const UserLists = () => {
     phoneNumber: item?.phoneNumber,
     status: item?.status
   }))
+
   const columns = [
     { field: 'username', headerName: 'Username', flex: 1 },
     { field: 'firstName', headerName: 'First Name', flex: 1 },
@@ -67,6 +70,7 @@ const UserLists = () => {
     rows: userLists || [],
     columns,
   };
+
   return (
     <>
       <ToastContainer />
