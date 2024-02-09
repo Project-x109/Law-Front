@@ -1,4 +1,5 @@
 // ** Custom Menu Components
+import withAuth from 'src/@core/utils/withAuth'
 import VerticalNavLink from './VerticalNavLink'
 import VerticalNavSectionTitle from './VerticalNavSectionTitle'
 
@@ -22,4 +23,4 @@ const VerticalNavItems = props => {
 
 }
 
-export default VerticalNavItems
+export default withAuth(VerticalNavItems,['admin', 'employee'])

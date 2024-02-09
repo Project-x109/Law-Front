@@ -102,7 +102,7 @@ const WeeklyOverview = ({ csrfToken, isLoggedIn }) => {
       }
     }
   }
-  const closingPerformance = weeklyReview.closed ? (" " + (((weeklyReview?.closed / (weeklyReview?.closed + weeklyReview?.processing + weeklyReview?.pending))).toFixed(2) * 100) + "%") : " " + 0 + "%"
+  const closingPerformance = weeklyReview?.closed ? (" " + (((weeklyReview?.closed / (weeklyReview?.closed + weeklyReview?.processing + weeklyReview?.pending))).toFixed(2) * 100) + "%") : " " + 0 + "%"
 
   return (
     <Card>
