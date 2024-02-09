@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const backendServerURL = "http://localhost:4000";
+const backendServerURL = "https://issuemanagementbackend.onrender.com";
 
 import {
   REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,

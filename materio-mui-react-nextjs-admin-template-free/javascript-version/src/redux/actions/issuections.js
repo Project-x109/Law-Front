@@ -1,5 +1,5 @@
 import axios from "axios";
-const backendServerURL = "http://localhost:4000/api/v1";
+const backendServerURL = "https://issuemanagementbackend.onrender.com/api/v1";
 import {
   ISSUE_REGISTER_ERROR,
   ISSUE_REGISTER_SUCCESS,
