@@ -16,6 +16,7 @@ import CardActions from '@mui/material/CardActions'
 import FormControl from '@mui/material/FormControl'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import Swal from 'sweetalert2'
+
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -40,7 +41,9 @@ const FormLayoutsSeparator = () => {
   const { csrfToken } = useSelector((state) => state.auth)
   const { error, loading, successMessage } = useSelector((state) => state.issue)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
+
   const dispatch = useDispatch();
+
   const [formValues, setFormValues] = useState({
     issueType: '',
     issueRegion: '',
@@ -64,6 +67,7 @@ const FormLayoutsSeparator = () => {
   const handleDateChange = (field) => (date) => {
     setFormValues({ ...formValues, [field]: date });
   };
+
   const dateFields = [
     { key: 'issueRequestDate', label: 'Issue Requested Date' },
     { key: 'issueStartDate', label: 'Issue Start Date' },
@@ -71,6 +75,7 @@ const FormLayoutsSeparator = () => {
     { key: 'issueOpenDate', label: 'Issue Open Date' },
     { key: 'issueDecisionDate', label: 'Issue Decision Date' },
   ];
+
   useEffect(() => {
     if (!csrfToken) {
       dispatch(getCsrf())
@@ -93,6 +98,8 @@ const FormLayoutsSeparator = () => {
     }
 
   };
+
+
   useEffect(() => {
     if (error && error?.error && error?.error.length > 0) {
       error?.error.map((singleError, index) => {
