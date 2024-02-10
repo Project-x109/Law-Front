@@ -109,7 +109,7 @@ const LoginPage = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf(), csrfToken])
+  }, [dispatch, csrfToken])
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -1,6 +1,8 @@
 import axios from "axios";
 
 const backendServerURL = "https://issuemanagementbackend.onrender.com";
+axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-XSRF-TOKEN';
+axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'XSRF-TOKEN';
 
 import {
   REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,
@@ -113,10 +115,13 @@ export const getCsrf = () => async (dispatch) => {
   }
 }
 export const login = (loginData, csrfToken) => async (dispatch) => {
+  console.log("actionresult", csrfToken)
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
-      "X-CSRF-Token": csrfToken,
+      'X-XSRF-TOKEN': csrfToken,
+      'X-XSRF-HTTP-HEADER-NAME': 'X-XSRF-TOKEN',
+      'X-XSRF-COOKIE-NAME': 'XSRF-TOKEN'
     };
 
     const loginResponse = await axios.post(
@@ -127,6 +132,7 @@ export const login = (loginData, csrfToken) => async (dispatch) => {
         headers
       }
     );
+    console.log(loginResponse)
     if (loginResponse.data.success) {
       localStorage.setItem('isLoggedIn', loginResponse.data.token);
       dispatch({ type: LOGIN_SUCCESS, payload: loginResponse?.data });

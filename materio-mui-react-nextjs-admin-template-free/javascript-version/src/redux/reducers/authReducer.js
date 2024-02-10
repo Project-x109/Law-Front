@@ -55,6 +55,7 @@ const authReducer = (state = initialState, action) => {
         loading: false,
       }
     case CSRF_SUCCESS:
+      console.log(action.payload.csrfToken)
       return {
         ...state,
         successMessage: action.payload.success,
@@ -112,6 +113,7 @@ const authReducer = (state = initialState, action) => {
         isLoggedIn: true
       };
     case LOGIN_ERROR:
+      console.log(state)
       return {
         ...state,
         user: null,
@@ -175,6 +177,7 @@ const authReducer = (state = initialState, action) => {
         deactivatedusersLists: null,
         profiles: null,
         isLoggedIn: false,
+        csrfToken: null,
       };
     case LOGOUT_ERROR:
       return {
