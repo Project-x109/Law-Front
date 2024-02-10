@@ -1,7 +1,7 @@
 import axios from "axios";
 const backendServerURL = "https://issuemanagementbackend.onrender.com/api/v1";
-axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-Csrf-Token';
-axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'X-Csrf-Token';
+axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-CSRF-Token';
+axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'X-CSRF-Token';
 
 import {
   ISSUE_REGISTER_ERROR,
@@ -44,7 +44,7 @@ export const registerNewIssues = (formValues, csrfToken, isLoggedIn) => async (d
     // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const registrationResponse = await axios.post(
@@ -80,7 +80,7 @@ export const getAllIssues = (csrfToken, isLoggedIn) => async (dispatch) => {
     // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const fetchResponse = await axios.get(
@@ -116,7 +116,7 @@ export const getIndividualIssue = (csrfToken, isLoggedIn, issueId) => async (dis
     // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const fetchIndiviualResponse = await axios.get(
@@ -152,7 +152,7 @@ export const updateIssue = (csrfToken, isLoggedIn, issueId, formValues) => async
     // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const updateResponse = await axios.put(
@@ -188,7 +188,7 @@ export const getUserBasedIssues = (csrfToken, isLoggedIn) => async (dispatch) =>
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const fetchUserBasedIssuesResponse = await axios.get(
@@ -222,7 +222,7 @@ export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => 
     dispatch({ type: LOGIN_LOADING_ISSUE });
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const updateStatusResponse = await axios.put(
       `${backendServerURL}/changeissuestatus`,
@@ -258,7 +258,7 @@ export const getRecentActivities = (csrfToken, isLoggedIn) => async (dispatch) =
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const fetchLatestActivitiesResponse = await axios.get(
@@ -293,7 +293,7 @@ export const getRecentActivity = (csrfToken, isLoggedIn) => async (dispatch) => 
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const fetchLatestActivityResponse = await axios.get(
@@ -328,7 +328,7 @@ export const getUserDashboardSummary = (csrfToken, isLoggedIn) => async (dispatc
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const getuserdashboardsummaryResponse = await axios.get(
@@ -363,7 +363,7 @@ export const getDashboardSummary = (csrfToken, isLoggedIn) => async (dispatch) =
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const getdashboardsummaryResponse = await axios.get(
@@ -397,7 +397,7 @@ export const getTotalIssuesByUser = (csrfToken, isLoggedIn) => async (dispatch) 
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const getTotalIssueByUserResponse = await axios.get(
@@ -431,7 +431,7 @@ export const getAllUserPerformances = (csrfToken, isLoggedIn) => async (dispatch
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const getAllUserPerformanceResponse = await axios.get(
@@ -466,7 +466,7 @@ export const getWeeklyReview = (csrfToken, isLoggedIn) => async (dispatch) => {
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const getWeeklyResponse = await axios.get(
       `${backendServerURL}/get-weekly-review`,
@@ -501,7 +501,7 @@ export const getIssueLevelCounts = (csrfToken, isLoggedIn) => async (dispatch) =
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const getIssueLevelCountResponse = await axios.get(
       `${backendServerURL}/priority-issues`,
@@ -535,7 +535,7 @@ export const getDepartmentWiseAnalysis = (csrfToken, isLoggedIn) => async (dispa
   try {
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const getDepartmentWiseResponse = await axios.get(
       `${backendServerURL}/get-department-wise-analyis`,

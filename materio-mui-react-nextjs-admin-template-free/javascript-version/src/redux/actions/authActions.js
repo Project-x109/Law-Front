@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const backendServerURL = "https://issuemanagementbackend.onrender.com";
-axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-Csrf-Token';
-axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'X-Csrf-Token';
+axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-CSRF-Token';
+axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'X-CSRF-Token';
 
 import {
   REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_ERROR, LOGIN_SUCCESS, FORGOT_SUCCESS, FORGOT_ERROR, RESET_SUCCESS, RESET_ERROR,
@@ -19,7 +19,7 @@ export const register = (userData, csrfToken) => async (dispatch) => {
   try {
     // Include the CSRF token in the request headers for POST requests
     const headers = {
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const registrationResponse = await axios.post(
@@ -56,7 +56,7 @@ export const registerEmployee = (formValues, csrfToken, isLoggedIn) => async (di
     // Include the CSRF token in the request headers for POST requests
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const registrationResponse = await axios.post(
@@ -119,7 +119,7 @@ export const login = (loginData, csrfToken) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
-      'X-Csrf-Token': csrfToken,
+      'X-CSRF-Token': csrfToken,
     };
 
     const loginResponse = await axios.post(
@@ -157,7 +157,7 @@ export const logout = (csrfToken) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const logouResponse = await axios.get(
@@ -192,7 +192,7 @@ export const forgetpassword = (forgetpasswordData, csrfToken) => async (dispatch
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const forgetpasswordResponse = await axios.post(
@@ -229,7 +229,7 @@ export const ResetPasswordAction = (ResetpasswordData, csrfToken) => async (disp
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
 
     const resetpasswordResponse = await axios.put(
@@ -268,7 +268,7 @@ export const changeOldPassword = (values, csrfToken, isLoggedIn) => async (dispa
 
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const changeOldPasswordResponse = await axios.put(
       `${backendServerURL}/api/v1/changepassword`,
@@ -305,7 +305,7 @@ export const changeNewUserPassword = (values, csrfToken, isLoggedIn) => async (d
 
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const changeNewPasswordResponse = await axios.put(
       `${backendServerURL}/api/v1/changenewuserpassword`,
@@ -340,7 +340,7 @@ export const profile = (csrfToken, isLoggedIn) => async (dispatch) => {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const profileResponse = await axios.get(
       `${backendServerURL}/api/v1/profile`,
@@ -375,7 +375,7 @@ export const allUsers = (csrfToken, isLoggedIn) => async (dispatch) => {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const listOfUsersResponse = await axios.get(
       `${backendServerURL}/api/v1/all-users`,
@@ -410,7 +410,7 @@ export const allDeactivatedUsers = (csrfToken, isLoggedIn) => async (dispatch) =
     dispatch({ type: LOGIN_LOADING });
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const listOfDeactivatedUsersResponse = await axios.get(
       `${backendServerURL}/api/v1/deactivated-users`,
@@ -444,7 +444,7 @@ export const updateStatus = (all, csrfToken, isLoggedIn) => async (dispatch) => 
     dispatch({ type: LOGIN_LOADING });
     const headers = {
       'Authorization': `${isLoggedIn}`,
-      "X-Csrf-Token": csrfToken,
+      "X-CSRF-Token": csrfToken,
     };
     const updateUsersResponse = await axios.put(
       `${backendServerURL}/api/v1/change-account-status`,
