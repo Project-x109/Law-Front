@@ -1,5 +1,8 @@
 import axios from "axios";
 const backendServerURL = "https://issuemanagementbackend.onrender.com/api/v1";
+axios.defaults.headers.common['X-XSRF-HTTP-HEADER-NAME'] = 'X-CSRF-Token';
+axios.defaults.headers.common['X-XSRF-COOKIE-NAME'] = 'X-CSRF-Token';
+
 import {
   ISSUE_REGISTER_ERROR,
   ISSUE_REGISTER_SUCCESS,
