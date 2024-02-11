@@ -22,7 +22,7 @@ import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import { logout } from 'src/redux/actions/authActions'
+import { logout, getCsrf } from 'src/redux/actions/authActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 // ** Styled Components

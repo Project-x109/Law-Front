@@ -6,7 +6,7 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { allUsers } from 'src/redux/actions/authActions';
+import { allUsers, getCsrf } from 'src/redux/actions/authActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { clearSuccessMessage } from 'src/redux/actions/authActions';
 import Loader from 'src/@core/utils/loader';

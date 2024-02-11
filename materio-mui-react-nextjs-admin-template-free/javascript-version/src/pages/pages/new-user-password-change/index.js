@@ -36,7 +36,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-import { changeNewUserPassword } from 'src/redux/actions/authActions'
+import { changeNewUserPassword, getCsrf } from 'src/redux/actions/authActions'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'src/@core/utils/loader'
 import 'react-toastify/dist/ReactToastify.css';
@@ -158,7 +158,7 @@ const NewUserResetPasswordPage = () => {
         router.push("/user-dashboard")
       });
     }
-  }, [error, successMessage]);
+  }, [error, router, successMessage]);
 
   return (
     <Box className='content-center'>

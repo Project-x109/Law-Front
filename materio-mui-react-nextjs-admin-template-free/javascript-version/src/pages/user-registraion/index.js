@@ -28,7 +28,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-import { registerEmployee } from 'src/redux/actions/authActions'
+import { registerEmployee, getCsrf } from 'src/redux/actions/authActions'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { validateForm } from 'src/@core/utils/validation'
