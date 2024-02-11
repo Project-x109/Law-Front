@@ -74,7 +74,7 @@ const ForgetPasswordPage = () => {
     if(!csrfToken){
       dispatch(getCsrf())
     }
-  }, [dispatch])
+  }, [dispatch,csrfToken])
 
 
   const handleChange = prop => event => {
