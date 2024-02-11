@@ -164,7 +164,7 @@ const ResetPasswordPage = () => {
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg
+            {/* <svg
               width={35}
               height={29}
               version='1.1'
@@ -222,7 +222,8 @@ const ResetPasswordPage = () => {
                   </g>
                 </g>
               </g>
-            </svg>
+            </svg> */}
+            <img src="/images/beaeka-logo.svg" alt="Beaeka Logo" />
             <Typography
               variant='h6'
               sx={{
