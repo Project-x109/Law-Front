@@ -37,7 +37,7 @@ const UserLists = () => {
       dispatch(getCsrf())
     }
     dispatch(getUserBasedIssues(csrfToken, isLoggedIn))
-  }, [dispatch, csrfToken, isLoggedIn,getCsrf]);
+  }, [dispatch, csrfToken, isLoggedIn]);
 
   useEffect(() => {
     if (error) {

@@ -40,7 +40,7 @@ const Dashboard = () => {
       dispatch(getCsrf());
     }
     dispatch(getIssueLevelCounts(csrfToken, isLoggedIn))
-  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
+  }, [dispatch, csrfToken, isLoggedIn]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error);

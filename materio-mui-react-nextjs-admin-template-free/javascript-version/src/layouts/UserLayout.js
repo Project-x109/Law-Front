@@ -41,7 +41,7 @@ const UserLayout = ({ children }) => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf,csrfToken]);
+  }, [dispatch,csrfToken]);
   useEffect(() => {
     if (csrfToken && isLoggedIn) {
       dispatch(profile(csrfToken, isLoggedIn));

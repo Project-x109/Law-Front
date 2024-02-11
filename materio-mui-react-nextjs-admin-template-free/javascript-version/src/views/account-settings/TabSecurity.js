@@ -21,7 +21,7 @@ import KeyOutline from 'mdi-material-ui/KeyOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 
-import { changeOldPassword, getCsrf, clearSuccessMessage } from 'src/redux/actions/authActions'
+import { changeOldPassword, clearSuccessMessage } from 'src/redux/actions/authActions'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'src/@core/utils/loader'
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,7 +85,7 @@ const TabSecurity = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf,csrfToken])
+  }, [dispatch,csrfToken])
 
   const handleSubmit = (e) => {
     e.preventDefault();

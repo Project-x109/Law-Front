@@ -36,7 +36,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-import { changeNewUserPassword, getCsrf } from 'src/redux/actions/authActions'
+import { changeNewUserPassword } from 'src/redux/actions/authActions'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from 'src/@core/utils/loader'
 import 'react-toastify/dist/ReactToastify.css';
@@ -94,7 +94,7 @@ const NewUserResetPasswordPage = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf, csrfToken])
+  }, [dispatch, csrfToken])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })

@@ -48,7 +48,7 @@ const TabIssue = () => {
       dispatch(getCsrf());
     }
     dispatch(getIndividualIssue(csrfToken, isLoggedIn, values?.issueId));
-  }, [dispatch, csrfToken, isLoggedIn, values.issueId, getCsrf]);
+  }, [dispatch, csrfToken, isLoggedIn, values.issueId]);
   useEffect(() => {
     const { id } = router.query;
     if (id) {

@@ -6,7 +6,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { allDeactivatedUsers, getCsrf, updateStatus } from 'src/redux/actions/authActions';
+import { allDeactivatedUsers, updateStatus } from 'src/redux/actions/authActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { clearSuccessMessage } from 'src/redux/actions/authActions';
 import Loader from 'src/@core/utils/loader';
@@ -35,7 +35,7 @@ const DeacivatedUserLists = () => {
       dispatch(getCsrf());
     }
     dispatch(allDeactivatedUsers(csrfToken, isLoggedIn));
-  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
+  }, [dispatch, csrfToken, isLoggedIn]);
 
   useEffect(() => {
     if (error) {
