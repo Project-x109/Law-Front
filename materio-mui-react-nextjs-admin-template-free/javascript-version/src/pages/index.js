@@ -72,7 +72,6 @@ const LoginPage = () => {
   const { error, csrfToken, successMessage, user } = useSelector((state) => state.auth)
   const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('isLoggedIn') : null;
 
-  console.log(csrfToken)
 
   // ** State
   const [values, setValues] = useState({
@@ -109,7 +108,7 @@ const LoginPage = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, csrfToken])
+  }, [dispatch, getCsrf, csrfToken])
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

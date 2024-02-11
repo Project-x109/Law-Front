@@ -60,7 +60,6 @@ const TabAccount = () => {
     }
   }
   const { profiles, user } = useSelector((state) => state.auth);
-  console.log(user)
 
   return (
     <CardContent>

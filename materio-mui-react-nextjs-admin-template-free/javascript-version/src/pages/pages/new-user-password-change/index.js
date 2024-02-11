@@ -94,7 +94,7 @@ const NewUserResetPasswordPage = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, getCsrf(), csrfToken])
+  }, [dispatch, getCsrf, csrfToken])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })

@@ -35,7 +35,7 @@ const DeacivatedUserLists = () => {
       dispatch(getCsrf());
     }
     dispatch(allDeactivatedUsers(csrfToken, isLoggedIn));
-  }, [dispatch, csrfToken, isLoggedIn]);
+  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
 
   useEffect(() => {
     if (error) {

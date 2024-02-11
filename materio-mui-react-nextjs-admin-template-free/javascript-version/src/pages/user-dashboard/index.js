@@ -44,7 +44,7 @@ const Dashboard = () => {
       dispatch(getCsrf());
     }
     dispatch(getIssueLevelCounts(csrfToken, isLoggedIn))
-  }, [dispatch, csrfToken, isLoggedIn]);
+  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
 
   useEffect(() => {
     if (error) {

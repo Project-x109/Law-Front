@@ -76,7 +76,7 @@ const FormLayoutsSeparator = () => {
     if (!csrfToken) {
       dispatch(getCsrf())
     }
-  }, [dispatch, csrfToken]);
+  }, [dispatch, csrfToken,getCsrf]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

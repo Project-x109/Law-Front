@@ -46,9 +46,13 @@ const UserDropdown = () => {
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
   }
+
   useEffect(() => {
-    dispach(getCsrf())
-  }, [dispach])
+    if (!csrfToken) {
+      dispach(getCsrf())
+    }
+  }, [dispach, getCsrf,csrfToken])
+
   const handleDropdownClose = url => {
     if (url) {
       dispach(logout(csrfToken))

@@ -115,7 +115,6 @@ export const getCsrf = () => async (dispatch) => {
   }
 }
 export const login = (loginData, csrfToken) => async (dispatch) => {
-  console.log("actionresult", csrfToken)
   try {
     dispatch({ type: LOGIN_LOADING });
     const headers = {
@@ -130,7 +129,6 @@ export const login = (loginData, csrfToken) => async (dispatch) => {
         headers
       }
     );
-    console.log(loginResponse)
     if (loginResponse.data.success) {
       localStorage.setItem('isLoggedIn', loginResponse.data.token);
       dispatch({ type: LOGIN_SUCCESS, payload: loginResponse?.data });

@@ -48,7 +48,7 @@ const TabIssue = () => {
       dispatch(getCsrf());
     }
     dispatch(getIndividualIssue(csrfToken, isLoggedIn, values?.issueId));
-  }, [dispatch, csrfToken, isLoggedIn, values.issueId]);
+  }, [dispatch, csrfToken, isLoggedIn, values.issueId, getCsrf]);
   useEffect(() => {
     const { id } = router.query;
     if (id) {
@@ -280,7 +280,7 @@ const TabIssue = () => {
 
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Issue Raising Officer' onChange={(e) => { handleChangeFormValues('issueRaisingOfficer')(e) }}  readOnly value={formValues.issueRaisingOfficer} defaultValue='ABC Pvt. Ltd.' />
+            <TextField fullWidth label='Issue Raising Officer' onChange={(e) => { handleChangeFormValues('issueRaisingOfficer')(e) }} readOnly value={formValues.issueRaisingOfficer} defaultValue='ABC Pvt. Ltd.' />
           </Grid>
 
 

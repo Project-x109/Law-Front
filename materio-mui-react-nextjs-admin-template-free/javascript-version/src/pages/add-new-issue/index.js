@@ -79,9 +79,10 @@ const FormLayoutsSeparator = () => {
 
   useEffect(() => {
     if (!csrfToken) {
-      dispatch(getCsrf())
+      dispatch(getCsrf());
     }
-  }, [dispatch, getCsrf(), csrfToken]);
+  }, [dispatch, getCsrf, csrfToken]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

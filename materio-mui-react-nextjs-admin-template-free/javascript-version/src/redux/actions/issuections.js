@@ -475,7 +475,6 @@ export const getWeeklyReview = (csrfToken, isLoggedIn) => async (dispatch) => {
         headers
       }
     );
-    console.log(getWeeklyResponse.data)
     if (getWeeklyResponse.data) {
       dispatch({ type: GET_WEEKELY_REVIEW_SUCCESS, payload: getWeeklyResponse.data });
     } else {

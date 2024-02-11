@@ -29,6 +29,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from 'src/@core/utils/withAuth'
 
+
 const Dashboard = () => {
   const { csrfToken } = useSelector((state) => state.auth);
   const { issueLevelCount, error, successMessage } = useSelector((state) => state.issue);
@@ -39,7 +40,7 @@ const Dashboard = () => {
       dispatch(getCsrf());
     }
     dispatch(getIssueLevelCounts(csrfToken, isLoggedIn))
-  }, [dispatch, csrfToken, isLoggedIn]);
+  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
   useEffect(() => {
     if (error) {
       toast.error(error?.error);

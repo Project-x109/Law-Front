@@ -24,14 +24,14 @@ const UserLists = () => {
       dispatch(getCsrf())
     }
     dispatch(allUsers(csrfToken, isLoggedIn))
-  }, [dispatch, csrfToken, isLoggedIn]);
+  }, [dispatch, csrfToken, getCsrf, isLoggedIn]);
 
   useEffect(() => {
     if (error) {
       toast.error(error?.error)
     }
     dispatch(clearSuccessMessage())
-  }, [error,dispatch]);
+  }, [error, dispatch]);
 
   const userLists = usersLists?.map((item) => ({
     id: item?._id,
@@ -111,4 +111,4 @@ const UserLists = () => {
   )
 }
 
-export default withAuth(UserLists,['admin'])
+export default withAuth(UserLists, ['admin'])
